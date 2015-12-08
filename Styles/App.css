@@ -1,0 +1,663 @@
+﻿body
+{
+    background-color: #F1F1F1;
+}
+.header
+{
+    padding: 15px 0 15px 75px;
+    color: white;
+    float: left;
+    background: #0082c3;
+    width: 100%;
+}
+.header .logo
+{
+    height:50px;
+    float:left
+}
+.header .myOwnerBox
+{
+    font-size: 1.8em;
+    float: left;
+    margin: 25px 0 0 5px;
+}
+.subheader
+{
+    width: 100%;
+    background: #fff;
+    -webkit-box-shadow: 0 1px 1px #999;
+    -moz-box-shadow: 0 1px 1px #999;
+    box-shadow: 0 1px 1px #999;
+    float: left;
+    clear: both;
+    margin-bottom: 20px;
+}
+.nav
+{
+    color: #95a1a9;
+}
+.nav div
+{
+    border: 0;
+    border-bottom: 3px solid;
+    border-color: #fff;
+    color: #95a1a9;
+    float: left;
+}
+.nav div:hover
+{
+    cursor: pointer;
+    color: #1a384b;
+    border-color: #ccc;
+    outline: 0;
+}
+.nav div.active
+{
+    border-color: #0082c3;
+    color: #1a384b;
+}
+.nav.primary 
+{
+    font-weight: 100;
+    font-size: 16px;
+    width:1000px;
+    margin: 0 auto;
+}
+.nav.primary div
+{
+    font-weight: 400;
+    padding: 16px 0 10px;
+    margin: 0 25px;
+    line-height: 16px;
+}
+.nav div.restaurantName
+{
+    color: #1a384b;
+    float: right;
+    font-size: 20px;
+}
+.nav div.restaurantName:hover
+{
+    color: #1a384b;
+    border: none;
+    cursor:default;
+}
+.main
+{
+    width:1000px;
+    clear: both;
+    margin: 0 auto 40px;
+    padding: 26px 30px;
+    -webkit-box-shadow: 0 1px 1px #999;
+    -moz-box-shadow: 0 1px 1px #999;
+    box-shadow: 0 1px 1px #999;
+    background-color: #FFF;
+            
+}
+.nav.secondary
+{
+    position: relative;
+    height: 30px;
+    overflow: hidden;
+    float: left;
+    width: 890px;
+    margin-bottom: 23px;
+}
+.nav.secondary .subheaderList
+{
+    position: absolute;
+}
+.myAccount
+{
+    float: right;
+    margin: 25px 60px 0 0;
+    position: relative;
+}
+.myAccount a
+{
+    font-size: 14px;
+}
+.myAccount > div
+{
+    display: none;
+    position: absolute;
+    background: transparent;
+    padding-top: 12px;
+    margin-left: -22px;
+    z-index: 10;
+}
+.myAccount:hover > div
+{
+    display: block;
+}
+.myAccount > div > div:not(.arrowUp) {
+    position: relative;
+    border-bottom: 1px solid #999;
+    background: #fff;
+    box-shadow: 0 1px 1px #999;
+    border-radius: 5px;
+}
+.myAccount > div > div > div {
+    color: #333;
+    padding: .5em;
+    font-size: 14px;
+    width: 140px;
+    border-bottom: 1px solid #F1F1F1;
+}
+.myAccount > div > div > div:hover
+{
+    background: #F1F1F1;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.myAccount .arrowUp {
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 20px solid white;
+    left: 45px;
+    position: absolute;
+    top: -3px;
+}
+.dialogTitle
+{
+    float: left;
+    clear:both;
+    width: 100px;
+    margin: 10px 6px;
+    text-align: right;
+}
+.dialogContent input[type="text"]
+{
+    margin: 3px 0;
+}
+.dialogContent .btn
+{
+    font-size: 1.4rem;
+    color: #FFF;
+    background: #a1a1a1;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    -moz-box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    transition: all 100ms;
+    margin: 12px 8px 4px;
+    padding: 4px 20px;
+}
+.dialogContent .btn:hover
+{
+    background: #C1C1C1;
+}
+.dialogBtn
+{
+    float: right;
+    margin: -16px 30px 20px;
+    font-size: 1.4rem;
+    color: #FFF;
+    background: #34b8f4;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    -moz-box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    transition: all 100ms;
+}
+.dialogBtn:hover
+{
+    background: #73D3FF;
+    color: #FFF;
+}
+.passwordDialog
+{
+    position: absolute;
+    width: 260px;
+    z-index: 1001;
+    background: #fbfbfb;
+    left: 50%;
+    margin-left: -130px;
+    margin-top: 148px;
+    border: 1px solid #ededed;
+    padding: 0 2em;
+    display: none;
+}
+.passwordDialog .dialogClose
+{
+    margin: 8px -38px 0;
+}
+.cancelDialog
+{
+    position: absolute;
+    width: 260px;
+    z-index: 1001;
+    background: #fbfbfb;
+    left: 50%;
+    margin-left: -130px;
+    margin-top: 148px;
+    border: 1px solid #ededed;
+    padding: 0 2em;
+    display: none;
+}
+.cancelDialog .dialogClose
+{
+    margin: 8px -38px 0;
+}
+.cancelDialog .dialogBtn
+{
+    width: 70px;
+    background: #a1a1a1;
+}
+.cancelDialog .dialogBtn:hover
+{
+    background: #C1C1C1;
+}
+.scrollArrow
+{
+    opacity:.3;
+    display: none;
+}
+.scrollArrow:hover
+{
+    opacity:.6;
+    cursor: pointer;
+}
+.nav.secondary div
+{
+    margin: 0 14px 6px;
+    position: relative;
+}
+.main .title
+{
+    font-weight: 400;
+    font-size: 3rem;
+    color: #0082c3;
+    margin-top: 40px;
+    text-align: center;
+}
+.main .subtitle
+{
+    color: #666;
+    font-size: 16px;
+    font-weight: 200;
+    line-height: 22px;
+    margin: 30px 0;
+}
+.main .content
+{
+    margin: 40px 0;
+    min-height: 150px;
+    text-align: center;
+    font-size: 2rem;
+    line-height: 1em;
+}
+.main .content select
+{
+    padding: 5px 30px 5px 10px;
+}
+.main .content input[type=text]
+{
+    line-height: 1.3em;
+    padding-left: 6px;
+    width: 400px;
+}
+.main .content textarea
+{
+    height: 4em;
+    width: 450px;
+}
+.main .content .textarea ul
+{
+    text-align: left;
+    font-size: 16px;
+    margin: 1em 80px;
+}
+.main .content input[type=radio]
+{
+    float: left;
+    clear: both;
+    margin-left: 40%;
+}
+.main .content div.radio
+{
+    float: left;
+    font-size: 1.25em;
+    margin: 0 8px .5em;
+}
+.main .content input[type=checkbox]
+{
+    float: left;
+    clear: both;
+    margin-left: 40%;
+}
+.main .content div.checkbox
+{
+    float: left;
+    font-size: 1.25em;
+    margin: 0 8px .5em;
+}
+.main .content .glyphicon
+{
+    color:#0082c3;
+    font-size: 1em;
+    margin-left: 6px;
+    vertical-align: bottom;
+}
+.main .content .glyphicon:hover
+{
+    cursor: pointer;
+}
+.main .content .glyphicon-plus-sign
+{
+    font-size: 1.25em;
+    vertical-align: sub;
+    margin-left: 10px;
+}
+.main .content .added
+{
+    margin: .5em 114px 0;
+    text-align: left;
+}
+.main .btnSection
+{
+    border-top: 4px solid #E0F0F8;
+    width: 90%;
+    margin: auto;
+    padding: 30px 0;
+    clear: both;
+}
+.main .backBtn
+{
+    font-size: 1.4rem;
+    color: #FFF;
+    background: #a1a1a1;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    -moz-box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    transition: all 100ms;
+    width: 100px;
+}
+.main .backBtn:hover, .main .backBtn.clicked
+{
+    background: #C1C1C1;
+}
+.main .nextBtn, .saveBtn
+{
+    font-size: 1.4rem;
+    color: #FFF;
+    background: #34b8f4;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    -moz-box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    transition: all 100ms;
+    width: 100px;
+    float: right;
+}
+.main .nextBtn:hover, .saveBtn:hover, .main .nextBtn.clicked
+{
+    background: #73D3FF;
+    color: #FFF;
+}
+.modal-dialog h3
+{
+    padding: 1em 50px;
+    font-size: 22px;
+    color: #666;
+    border-bottom: 1px solid #ccc;
+}
+.multiTextGroup
+{
+    float: left;
+    margin: 0 100px 30px 10px;
+    padding: 10px 0 0 40px;
+}
+.multiTextGroup.divider
+{
+    border-top: 4px solid #E0F0F8;
+    padding-top: 30px;
+}
+.multiTextGroup h2
+{
+    color: #333;
+    font-size: 22px;
+    font-weight: 200;
+    text-align: left;
+    margin-top: 0;
+}
+.multiText
+{
+    text-align: left;
+    width: 330px;
+    float: left;
+    margin: 8px 16px 8px 0;
+}
+.multiText span
+{
+    color: #333;
+    font-weight: 400;
+
+}
+.multiText input[type='text']
+{
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    transition-duration: 0.15s, 0.15s;
+    width: 320px;
+    padding: 2px 6px;
+    border: 1px solid #bbb;
+    margin-top:5px;
+}
+.multiText input[type='text']:hover, .multiText input[type='text']:focus 
+{
+    border: 1px solid #09D!important;
+}
+.questionMark
+{
+    height: 24px;
+    margin-left: 4px;
+    margin-top: -1px;
+}
+.questionMark:hover
+{
+    cursor: pointer;
+}
+.businessPlanContent
+{
+
+}
+.businessPlanContent h2
+{
+    margin-bottom: 1em;
+}
+.businessPlanContent .instructions
+{
+    margin: 0 60px 1em 0;
+}
+.businessPlanContent .AnswerControl
+{
+    width: 833px;
+    height: 300px;
+    margin: 1em 0 2em;
+}
+.businessPlanContent .ExampleBtn
+{
+    background: #F19F00;
+    color: white;
+    padding: 4px 16px;
+    width: 155px;
+    border-radius: 15px;
+    border: 2px solid #F19F00;
+    margin: 2em 0 1em;
+}
+.businessPlanContent .ExampleBtn:hover
+{
+    background: white;
+    color: #F19F00;
+    cursor: pointer;
+}
+.businessPlanContent .ExampleText
+{
+    margin: 0 12px 1em 0;
+    padding: 2em 6em;
+    background: #eee;
+    float: left;
+    border-bottom: 20px solid #0082c3;
+}
+.businessPlanContent .ExampleText div
+{
+    float: left;
+}
+.businessPlanContent textarea
+{
+    webkit-box-shadow: 0 0 25px 2px rgba(52,184,244,.3);
+    -moz-box-shadow: 0 0 25px 2px rgba(52,184,244,.3);
+    box-shadow: 0 0 25px 2px rgba(52,184,244,.3);
+    border: 1px solid #fff;
+    padding: 1em 3em;
+    font-size: 16px;
+}
+.businessPlanContent .textHeader
+{
+    width: 646px;
+    height: 20px;
+    background: #F8F8F8;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.businessPlanContent textarea:hover, .businessPlanContent textarea:focus 
+{
+    border: 1px solid #09D!important;
+}
+.scrollExample
+{
+    position: absolute;
+    opacity: .8;
+}
+.scrollExample:hover
+{
+    opacity: 1;
+    cursor: pointer;
+}
+.scrollExample.left
+{
+    margin: 15px 0 0 -70px;
+}
+.scrollExample.right
+{
+    margin: 15px 0 0 0;
+}
+.questionMarkWrapper
+{
+    position: relative;
+    float: left;
+}
+.questionMarkWrapper > div
+{
+    display: none;
+    position: absolute;
+    background: transparent;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    bottom: 0px;
+    min-width: 360px;
+}
+.questionMarkWrapper:hover > div
+{
+    display: block;
+}
+.questionMarkWrapper > div > div {
+
+    /* Styling block element, not required */
+    position: relative;
+    padding: 1em;
+    border-bottom: 1px solid #999;
+    background: #fff;
+    box-shadow: 0 1px 1px #999;
+    left: -16px;
+}
+/* Required for Down Triangle */
+.questionMarkWrapper > div > div:before, .questionMarkWrapper > div > div:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    border-bottom: 0;
+}
+/* Stroke */
+.questionMarkWrapper > div > div:before {
+    bottom: -16px;
+    left: 16px;
+
+    /* If 1px darken stroke slightly */
+    border-top-color: #777;
+    border-width: 16px;
+}
+/* Fill */
+.questionMarkWrapper > div > div:after {
+    bottom: -15px;
+    left: 17px;
+    border-top-color: #fff;
+    border-width: 15px;
+}
+.questionMarkWrapper > div.even {
+    left: -300px;
+}
+.questionMarkWrapper > div.even > div:before {
+    left: 315px;
+}
+.questionMarkWrapper > div.even > div:after {
+    left: 316px;
+}
+.questionMarkWrapper > div.wide
+{
+    width: 540px;
+}
+.questionMarkWrapper a
+{
+    color: #337ab7;
+}
+.questionMarkWrapper a:hover
+{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.questionMarkWrapper a:hover, .questionMarkWrapper a:focus, .questionMarkWrapper a:visited
+{
+    color: #0082c3;
+}
+.printContent div
+{
+    font-size: 20px;
+}
+.printContent img
+{
+    height: 30px;
+    margin: 6px 8px 12px 0;
+}
+.printContent img:hover
+{
+    cursor: pointer;
+}
+.printContent div.printBtn
+{
+    color: #FFF;
+    background: #34b8f4;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    -moz-box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.75);
+    transition: all 100ms;
+
+    width: 300px;
+    float: left;
+    text-align: center;
+    font-size: 48px;
+    height: 80px;
+    padding: 24px;
+    border-radius: 16px;
+    margin-top: 48px;
+}
+.printContent div.printBtn:hover
+{
+    background: #73D3FF;
+    color: #FFF;
+    cursor: pointer;
+}
