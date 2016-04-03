@@ -11,11 +11,18 @@ public partial class Plans_Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (ConfigurationManager.AppSettings["IsProduction"] != "true")
-            return;
-
-        Email email = new Email("RestaurantBPlan@RestaurantBPlan.com", "williamallenparks@gmail.com", "Visited Plans", "");
-        email.Send();
+        string price = "";
+        if (Session["SessionVariableName"] != null)
+        {
+            price = Session["SessionVariableName"].ToString();
+        }
+        else
+        {
+            Random random = new Random();
+            price = random.Next(0, 4).ToString();
+            Session["SessionVariableName"] = price;
+        }
+        priceRnd.Value = price;
     }
 
     [WebMethod]

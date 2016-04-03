@@ -82,6 +82,11 @@
     border: none;
     cursor:default;
 }
+.restaurantBPlan 
+{
+    margin: 18px 0 0 11px;
+    float: left;
+}
 .main
 {
     width:1000px;

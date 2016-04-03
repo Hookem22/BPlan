@@ -71,7 +71,7 @@ textarea
     background-color: #000;
     opacity: .5;
     display: none;
-    z-index: 999;
+    z-index: 900;
 }
 .modal-dialog
 {
@@ -530,6 +530,7 @@ input[type="text"].error, input[type="password"].error, textarea.error, select.e
 .loginBtn a:hover
 {
     text-decoration: underline;
+    cursor: pointer;
 }
 .loginDialog
 {
@@ -773,6 +774,76 @@ input[type="text"].error, input[type="password"].error, textarea.error, select.e
     margin-left: -264px;
     z-index: 999;
     padding: 30px 30px;
+}
+.samplePlanHeader {
+    background-color: #e5e5e5;
+    position: absolute;
+    font-size: 20px;
+    text-align: left;
+    padding: 12px 51px;
+    width: 700px;
+    z-index: 995;
+    top: 60px;
+    height: 24px;
+    left: 150%;
+    margin-left: -400px;
+    border-radius: 5px 5px 0 0;
+    display: none;
+
+    top: 50%;
+    margin-top: -50px;
+}
+.samplePlan {
+    font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;
+    color: #333333;
+    width: 800px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    background: white;
+    position: absolute;
+    z-index: 990;
+    top: 60px;
+    bottom: 40px;
+    left: 150%;
+    margin-left: -400px;
+    overflow: auto;
+    display: none;
+
+    top: 50%;
+    bottom: 50%;
+}
+.samplePlan h1 {
+    margin-top: 2em;
+}
+.sampleContent {
+    padding: 60px 90px 90px;
+}
+.sampleTag {
+    position: absolute;
+    text-align: center;
+    width: 76%;
+    margin-top: -90px;
+    font-size: 44px;
+    display: none;
+}
+.sampleContent div:hover .sampleTag {
+}
+.sampleFooter {
+    background-color: #e5e5e5;
+    position: absolute;
+    font-size: 20px;
+    width: 800px;
+    z-index: 995;
+    bottom: 40px;
+    height: 90px;
+    left: 150%;
+    margin-left: -400px;
+    border-radius: 0 0 5px 5px;
+    display: none;
+
+    bottom: 50%;
+    margin-bottom: -80px;
 }
 
 

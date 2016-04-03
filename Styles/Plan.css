@@ -1,0 +1,561 @@
+﻿/*
+@font-face {
+    font-family: 'KlinicSlab';
+    src: url('../fonts/KlinicSlabMedium.otf') format("opentype");
+}
+@font-face {
+    font-family: 'KlinicSlabBold';
+    src: url('../fonts/KlinicSlabBold.otf') format("opentype");
+}
+@font-face {
+    font-family: 'KlinicSlabBoldIt';
+    src: url('../fonts/KlinicSlabBoldIt.otf') format("opentype");
+}
+@font-face {
+    font-family: 'KlinicSlabLight';
+    src: url('../fonts/KlinicSlabLight.otf') format("opentype");
+}*/
+body
+{
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /*font-family: "KlinicSlab","Helvetica Neue",Helvetica,Arial,sans-serif;*/
+    background-color: #EEEEEE;
+    margin: 0;
+    padding: 0;
+}
+p
+{
+    margin: 30px 124px;
+    font-size: 20px;
+    line-height: 1.4em;
+    color: #555;
+}
+.blueBtn 
+{
+    font-size: 16px;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    padding: 5px 25px;
+    background: #4683ea;
+    color: #fff;
+    margin: 1em;
+}
+.blueBtn:hover 
+{
+    color: #4683ea;
+    background: #fff;
+    border-color: #4683ea;
+    cursor: pointer;
+}
+.mainnav
+{
+    background: #F19F00;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    color: white;
+}
+.pitch {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: url(/img/pitch.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.content {
+    width: 800px;
+    position: absolute;
+    left: 150%;
+    margin: 60px 0 30px -390px;
+    z-index: 999;
+    padding: 16px 0px;
+    border-radius: 15px;
+    border: 4px solid #F19F00;
+    color: #333;
+    background: white;
+}
+/*.priceTable
+{
+    width: 723px;
+    margin: 24px 28px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    position: relative;
+    float: left;
+    text-align: center;
+}
+.priceColumn
+{
+    float: left;
+    width: 240px;
+    border-right: 1px solid #e5e5e5;
+}
+.priceColumn.best
+{
+    box-shadow: 0 0 30px rgba(0,0,0,0.25);
+    border-right-color: #CDCDCD;
+}
+.priceColumn .bestValue
+{
+    position: absolute;
+    top: -17px;
+    width: 240px;
+    border: 1px solid #D5D5D5;
+    background: #fff;
+    text-align: center;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    text-transform: uppercase;
+    padding: 5px 0;
+    z-index: 2;
+    right: 0px;
+    color: #F19F00;
+}
+.priceColumnHeader
+{
+    background: #f9fafa;
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid #e5e5e5;
+}
+.priceColumn h3 
+{
+    text-transform: uppercase;
+    color: #999;
+    margin-top: 30px;
+}
+.priceColumn h4 
+{
+    font-size: 32px;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-weight: normal;
+    font-family: 'ProximaNovaLight', 'Helvetica Neue', 'Helvetica', 'Arial';
+    color: #3e4547;
+}
+.priceColumn h5 
+{
+    font-family: 'ProximaNovaLight', 'Helvetica Neue', 'Helvetica', 'Arial';
+    color: #3e4547;
+    margin: 1em 0 .5em;
+}
+.priceColumnDetails 
+{
+    padding: .5em 32px;
+    clear: both;
+}
+.priceColumnDetails div
+{
+    text-align: left;
+    border-top: 1px solid #e5e5e5;
+    padding: 8px 4px;
+    font-size: 14px;
+}
+.priceExplanation
+{
+    clear: both;
+    color: #3e4547;
+    margin: 16px 10px;
+    font-size: 18px;
+    font-weight: bold;
+}*/
+.priceTable {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+}
+.priceColumn {
+    float: left;
+    width: 20%;
+    border: 3px solid #357ebd; 
+    padding: 30px 30px 30px;
+    border-radius: 7px;
+    color: #333333;
+    text-align: center;
+    position: relative;
+    margin: 0 3% 30px 0;
+}
+.strike {
+    text-decoration: line-through;
+}
+.oldPrice {
+    font-size: 33px;
+    line-height: 36px;
+    font-weight: 300;
+}
+.actualPrice {
+    font-size: 56px;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+    font-weight: 300;
+}
+.priceTitle {
+    font-size: 23px;
+    line-height: 32px;
+    font-weight: 400;
+    color: #353535;
+    margin: 0 0px 30px;
+    padding-bottom: 5px;
+    border-bottom: 3px solid #357ebd;
+}
+.priceItem {
+    padding: 3px 0;
+    font-size: 16px;
+    font-weight: 400;
+     margin: 10px -8px;
+}
+.priceTable .playButton {
+    padding: 6px 12px;
+    width: 100%;
+    margin: 28px -12px 4px;
+}
+
+
+
+
+
+.howitworks
+{
+    margin: 20px 64px;
+    font-size: 18px;
+    line-height: 1.4em;
+}
+.howitworks span
+{
+    font-weight:bold;
+}
+h2
+{
+    text-align:center;
+    margin: 1.4em 0 1em;
+}
+.value
+{
+    text-align: center;
+    font-size: 36px;
+    padding: 38px 0 6px;
+}
+
+
+.payment
+{
+    margin-top: 0;
+    margin-left: -253px;
+    left: 150%;
+    position: absolute;
+    display: none;
+}
+.payment .question
+{
+    font-family: "KlinicSlabBoldIt","KlinicSlab","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: white;
+    font-size: 34px;
+    line-height: 34px;
+    position: relative;
+    text-align: center;
+    margin: 20px 0 20px;
+}
+.payment .answer
+{
+    width: 470px;
+    height: 410px;
+    position: fixed;
+    z-index: 1999;
+    padding: 30px 30px;
+    border-radius: 15px;
+    border: 6px solid #357ebd;
+    color: #6D696E;
+    background: white;
+    left: 50%;
+    margin-left: -251px;
+    margin-bottom: 50px;
+}
+.payment .packageType
+{
+    text-align:center;
+    color: #999;
+    font-size: 32px;
+    margin:0 0 20px;
+}
+.payment .answer input
+{
+    margin-left: 70px;
+}
+.dialogClose {
+    font-size: 18pt;
+    color: #333333;
+    cursor: pointer;
+    font-family: Helvetica,Arial,san-serif;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.modal-backdrop {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background-color: #000;
+    opacity: .5;
+    display: none;
+    z-index: 1000;
+}
+
+.payment .pitchButton {
+    margin: 23px 80px;
+    left: 0;
+    width: 280px;
+    color: #fff;
+    background: #357ebd;
+    transition-duration: 0.7s;
+    -webkit-transition: 0.7s;
+    padding: 10px 30px;
+    position: absolute;
+    font-size: 24px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 15px;
+    border: 4px solid white;
+    box-shadow: 3px 3px 8px #333333;
+}
+.pitchButton:hover {
+    box-shadow: inset 0 100px 0 0 white;
+    transition-duration: 0.4s;
+    -webkit-transition: 0.4s;
+    cursor: pointer;
+    border: 4px solid #357ebd;
+    color: #357ebd;
+}
+
+.payment input {
+    font-family: "KlinicSlab","Helvetica Neue",Helvetica,Arial,sans-serif;
+    padding: 6px 12px;
+    font-size: 16px;
+    line-height: 1.42857143;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.payment .answer input {
+    width: 240px;
+    margin-right: 16px;
+    margin-left: 88px;
+    font-size: 20px;
+}
+
+.mainnav {
+    background: #F19F00;
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+    top: 0;
+}
+.mainnav ul
+{
+    margin: 8px 16px;
+
+}
+.mainnav ul li
+{
+    display: inline;
+    margin: 8px 16px;
+}
+.mainnav ul li a
+{
+    color: white;
+    text-decoration: none;
+}
+.loginBtn
+{
+    position: absolute;
+    right: 20px;
+    top: 0px;
+}
+.loginBtn a:hover
+{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.moreDetails {
+    color: #777;
+}
+
+.moreDetails:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.financialDetails {
+    margin-top: 60px;
+    margin-left: -430px;
+    left: 50%;
+    position: fixed;
+    display: none;
+    width: 820px;
+    z-index: 3000;
+    padding: 30px 30px 45px;
+    border-radius: 15px;
+    border: 4px solid #d5d5d5;
+    background: white;
+    font-size: 22px;
+    line-height: 30px;
+}
+
+.playButton {
+    padding: 12px 30px;
+    border: 2px solid transparent;
+    color: white;
+    background: #357ebd; /*#4683ea*/
+    border: 2px solid #357ebd;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -ms-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    border-radius: 6px;
+    font-size: 16px;
+
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.playButton:hover {
+    color:  #357ebd;
+    background: white;
+}
+
+.samplePlanHeader {
+    background-color: #e5e5e5;
+    position: fixed;
+    font-size: 20px;
+    text-align: left;
+    padding: 12px 51px;
+    width: 720px;
+    z-index: 995;
+    top: 60px;
+    height: 24px;
+    left: 50%;
+    margin-left: -400px;
+    border-radius: 5px 5px 0 0;
+    display: none;
+    z-index: 2001;
+
+    top: 50%;
+    margin-top: -50px;
+}
+.samplePlan {
+    font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;
+    color: #333333;
+    width: 820px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    background: white;
+    position: fixed;
+    z-index: 990;
+    left: 50%;
+    margin-left: -400px;
+    overflow: auto;
+    display: none;
+    z-index: 2000;
+
+    top: 50%;
+}
+.samplePlan h1 {
+    margin-top: 2em;
+}
+.sampleContent {
+    padding: 75px 105px 0px;
+}
+.sampleTag {
+    position: absolute;
+    text-align: center;
+    width: 76%;
+    margin-top: -90px;
+    font-size: 44px;
+    display: none;
+}
+.sampleContent div:hover .sampleTag {
+}
+.sampleFooter {
+    background-color: #e5e5e5;
+    position: fixed;
+    font-size: 20px;
+    width: 820px;
+    z-index: 995;
+    bottom: 40px;
+    height: 20px;
+    left: 50%;
+    margin-left: -400px;
+    border-radius: 0 0 5px 5px;
+    display: none;
+    z-index: 2001;
+
+    bottom: 50%;
+    margin-bottom: -20px;
+}
+
+#startDiv {
+    margin: 1em auto;
+    width: 60%;
+    border: 4px solid #4683ea;
+    border-radius: 5px;
+    padding: 1em 3em;
+    background: #f5f5f5;
+    height: 118px;
+}
+.startButton {
+    color: white;
+    width: 330px;
+    text-transform: uppercase;
+    padding: 17px 0px 12px 0px;
+    font-size: 22px;
+    font-family: "Open Sans",Helvetica,Arial,sans-serif;
+    border: 0;
+    text-align: center;
+    border-radius: 3px;
+    border-bottom: 2px solid #c07f00;
+    background: #F19F00;
+    background: -moz-linear-gradient(90deg, #F19F00, #f3b232);
+    background: -webkit-linear-gradient(90deg, #F19F00, #f3b232);
+    background: -o-linear-gradient(90deg, #F19F00, #f3b232);
+    background: -ms-linear-gradient(90deg, #F19F00, #f3b232);
+    background: linear-gradient(180deg, #F19F00, #f3b232);
+    margin: 58px auto;
+}
+.startButton:hover {
+    background: none;
+    background-color: #f19f00;
+    color: #ffffff;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+}
+.startTitle {
+    width: 100%;
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+}
+.startPrice {
+    font-size: 38px;
+    margin: -10px 0 0 13px;
+    float: left;
+}
+input.error {
+    border: 1px solid #a94442;
+}

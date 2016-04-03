@@ -8,8 +8,8 @@
     <meta name="description" content="How to Start a Restaurant. Restaurant Business Plans and Checklists. RestaurantBPlan.com" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
     <link rel="icon" type="image/png" href="img/favicon.png">
-    <link href="Styles/Style.css?i=4" rel="stylesheet" type="text/css" />
-    <link href="Styles/Mobile.css?i=3" rel="stylesheet" type="text/css" />
+    <link href="Styles/Style.css?i=6" rel="stylesheet" type="text/css" />
+    <link href="Styles/Mobile.css?i=6" rel="stylesheet" type="text/css" />
 
     <script src="Scripts/jquery-2.0.3.min.js" type="text/javascript"></script>
     <script src="Scripts/Helpers.js" type="text/javascript"></script>
@@ -163,6 +163,8 @@
                     template = template.replace("{{Question}}", question);
                     template = template.replace("<input", "<input placeholder='Italian, Tex Mex, BBQ, etc.' ");
                     Prospect.Restaurant = $(".answer input[type='text']").val();
+                    if (Prospect.Restaurant)
+                        $(".samplePlanHeader span").html(Prospect.Restaurant + " | Business Plan");
                     break;
                 case 3:
                     template = '<div class="question"><div class="question"><span>How big will it be?</span></div><div class="answer howbig"><a class="shadowBox">Intimate<div>(Less than 50 seats)</div></a><a class="shadowBox">Average<div>(50 - 150 seats)</div></a><a class="shadowBox">Large<div>(More than 150 seats)</div></a></div></div>';
@@ -187,7 +189,7 @@
                 //    break;
                 //case 7:
                 //    question = "Here's how it works:";
-                //    template = '<div class="question"><span>{{Question}}</span></div><div class="answer" style="padding:30px;"><img src="img/businessplan.png" style="height: 110px;margin: 4px 18px 0 0;" /><h2 style="padding-right: 20px;font-weight: normal;font-size: 22px;margin-bottom: 32px;">The first thing you need to do is put together a business plan that you can take to investors or use to open your restaurant.</h2><a class="button nextBtn" style="margin-left:300px;" >Next</a></div>';
+                //    template = '<div class="question"><span>{{Question}}</span></div><div class="answer" style="padding:30px;"><img src="img/businessplan2.png" style="height: 110px;margin: 4px 18px 0 0;" /><h2 style="padding-right: 20px;font-weight: normal;font-size: 22px;margin-bottom: 32px;">The first thing you need to do is put together a business plan that you can take to investors or use to open your restaurant.</h2><a class="button nextBtn" style="margin-left:300px;" >Next</a></div>';
                 //    template = template.replace("{{Question}}", question);
                 //    break;
                 //case 8:
@@ -200,6 +202,34 @@
                     Prospect.Opening = $(".answer input[type='text']").val();
                     break;
                 case 7:
+                    window.location.href = "/Plans";
+                    return;
+
+
+                    $(".logoDiv").animate({ "margin-left": "-100%" }, 500, function () { });
+
+                    $("body").css("overflow-x", "hidden");
+
+                    $(".samplePlanHeader, .samplePlan, .sampleFooter").show().animate({ left: "50%" }, 500, function () {
+                        $(".modal-backdrop").show();
+                        $("body").css("overflow-x", "");
+
+                        setTimeout(function () { 
+                            $(".samplePlanHeader").animate({ top: "60px", "margin-top": "0" }, 750, function () {
+
+                            });
+                            $(".samplePlan").animate({ top: "60px", bottom: "40px" }, 750, function () {
+
+                            });
+                            $(".sampleFooter").animate({ bottom: "40px", "margin-bottom": "0" }, 750, function () {
+
+                            });
+                        }, 250);
+                    });
+
+
+                    return;
+
                     var template = '<div class="question"><span>{{Question}}</span></div><div class="answer">{{Answer}}</div>';
                     question = "Making your restaurant dream<br /> a reality is less than a minute away.";
                     template = template.replace("{{Question}}", question);
@@ -227,7 +257,7 @@
                     return;
 
                 default:
-                    window.href.location = "/App";
+                    window.location.href = "/App";
 
             }
 
@@ -426,6 +456,22 @@
 <body>
 <form id="form1" runat="server">
     <div class="modal-backdrop" style="height:150%"></div>
+    <div class="samplePlanHeader"><span>Sample Business Plan</span>
+        <a href="/HowItWorks" style="font-size: 16pt;color: #333333;cursor: pointer;font-family: Helvetica,Arial,san-serif;position: absolute;right: 24px;">X</a>
+    </div>
+    <div class="samplePlan">
+        <div class="sampleContent">
+            <h1 style="text-align:center;font-weight: normal;margin-top:1em;">Sales Projections - Average Check Price</h1>
+            <img src="img/screen1.png" />
+            <h1 style="text-align:center;font-weight: normal;">Sales Projections - Typical Week</h1>
+            <img src="img/screen2.png" />
+            <h1 style="text-align:center;font-weight: normal;">Detailed Income and Cash Flow</h1>
+            <img src="img/screen3.png" />
+            <h1 style="text-align:center;font-weight: normal;">5 Year Operating Projections</h1>
+            <img src="img/screen4.png" />
+        </div>
+    </div>
+    <div class="sampleFooter"><a href="/Plans" class="pitchButton">Get This Plan</a></div>
     <div class="loginDialog">
         <div class="dialogClose" onclick="$('.loginDialog').hide();$('.modal-backdrop').hide();">X</div>
         <h3>Log In</h3>
@@ -446,8 +492,8 @@
     <header class="mainnav">
          <ul>
             <li><a href="#">HOME</a></li>
-            <li><a href="#howitworks">ABOUT</a></li>
-            <li><a href="#contact">CONTACT</a></li>
+            <li><a href="/HowItWorks">HOW IT WORKS</a></li>
+            <li><a href="/Plans">PLANS</a></li>
             <li class="loginBtn"><a onclick="OpenLogin();">LOG IN</a></li>
         </ul>
     </header>

@@ -728,7 +728,7 @@
         </div>
         <div class="contactDialog modal-dialog" style="  width: 420px;margin-left: -210px;">
             <div class="dialogClose" onclick="$('.contactDialog').hide();">X</div>
-            <h3>Contact Us</h3>
+            <h3>How can we help?</h3>
             <textarea style="margin: 16px 46px;height: 135px;width: 331px;"></textarea>
             <div class="contactError" style="margin-left: 42px;float: left;"></div>
             <div class="btn dialogBtn" style="margin:0 42px 16px 0;" onclick="SendContact();">Send</div>
