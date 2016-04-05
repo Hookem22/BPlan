@@ -228,8 +228,8 @@ public partial class Default : System.Web.UI.Page
     [WebMethod]
     public static Prospect CreateProspect()
     {
-        if (ConfigurationManager.AppSettings["IsProduction"] != "true")
-            return new Prospect();
+        //if (ConfigurationManager.AppSettings["IsProduction"] != "true")
+        //    return new Prospect();
 
         Prospect prospect = new Prospect();
         prospect.Save();
@@ -239,10 +239,12 @@ public partial class Default : System.Web.UI.Page
     [WebMethod]
     public static void UpdateProspect(Prospect prospect)
     {
-        if (ConfigurationManager.AppSettings["IsProduction"] != "true")
-            return;
+        //if (ConfigurationManager.AppSettings["IsProduction"] != "true")
+        //    return;
 
         prospect.Save();
+        HttpContext.Current.Session["CurrentProspect"] = prospect;
+
         if (!string.IsNullOrEmpty(prospect.Email))
         {
             Subscribe(prospect);

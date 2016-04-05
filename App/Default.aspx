@@ -22,48 +22,91 @@
         var Questions;
         var currentQuestion = 0;
         var currentUserId = 0;
+        var currentUser;
 
         $(document).ready(function () {
-            currentUserId = +$("#CurrentUserId").val();
-            if ($("#NewUser").val())
-            {
-                $(".helpDialog h3").html("Welcome " + $("#UserName").val() + "!");
-                $(".helpDialog").show();
+            var prospectId = +$("#ProspectId").val();
+            if (prospectId) {
                 $(".modal-backdrop").show();
+                $(".signup").show();
             }
-            $(".myAccount a").html($("#UserName").val());
-            $(".restaurantName").html($("#RestaurantName").val());
-            $(".fromDb .instructions").html($("#ConceptOverview").val());
-            
-            var success = function (questions) {
-                currentQuestion = 0;
-                Questions = questions;
-            };
-            Post("Get", { header: "Concept", category: "Create Your Concept", userId: currentUserId }, success);
+            else {
+                currentUserId = +$("#CurrentUserId").val();
+                //if ($("#NewUser").val())
+                //{
+                //    $(".helpDialog h3").html("Welcome " + $("#UserName").val() + "!");
+                //    $(".helpDialog").show();
+                //    $(".modal-backdrop").show();
+                //}
+                $(".myAccount a").html($("#UserName").val());
+                $(".restaurantName").html($("#RestaurantName").val());
+                //$(".fromDb .instructions").html($("#ConceptOverview").val());
+
+                //TOOD: Get user
+                //var success = function (questions) {
+                //    currentQuestion = 0;
+                //    Questions = questions;
+                //};
+                //Post("Get", { header: "Concept", category: "Create Your Concept", userId: currentUserId }, success);
+            }
+
+
+            $(".signupBtn").click(function() {
+                var error = false;
+                $(".signup input").removeClass("error")
+                if (!$("#signupName").val()) {
+                    $("#signupName").addClass("error");
+                    error = true;
+                } if (!$("#signupEmail").val()) {
+                    $("#signupEmail").addClass("error");
+                    error = true;
+                }
+                if (!$("#signupPassword").val()) {
+                    $("#signupPassword").addClass("error");
+                    error = true;
+                }
+                if ($("#signupPassword").val() != $("#signupConfirm").val()) {
+                    $("#signupPassword").addClass("error");
+                    $("#signupConfirm").addClass("error");
+                    error = true;
+                }
+                if (error)
+                    return;
+
+                var user = { Name: $("#signupName").val(), Email: $("#signupEmail").val(), Password: $("#signupPassword").val() };
+
+                var success = function (user) {
+                    currentUser = user;
+
+                    $(".myAccount a").html(user.Name);
+                    $(".restaurantName").html(user.Restaurant.Name);
+
+                    $(".modal-backdrop").hide();
+                    $(".signup").hide();
+                };
+
+                Post("CreateUser", { user: user, prospectId: prospectId }, success);
+            });
 
             $(".nav.primary div").not(".restaurantName").click(function () {
                 if ($(this).hasClass("active"))
                     return;
 
+                var currentScreen = $(".nav.primary div.active").html();
                 $(this).siblings().removeClass("active");
                 $(this).addClass("active");
                 $(".nav.secondary .subheaderList div.active").css({ "border-color": "#0082c3", "color": "#1a384b" });
                 $(".nav.secondary .subheaderList div").removeClass("active");
 
-                if ($(this).text() == "Print") {
-                    PopulatePrint();
-                }
-                else {
-                    $(".businessPlanContent").addClass("last");
-                    Get();
-                    populateSubs = setInterval(function () {
-                        if (!$(".businessPlanContent").hasClass("last") && $(".printContent").length == 0) {
-                            clearInterval(populateSubs);
-                            PopulateSubheaders();
-                        }
-                    }, 100);
-                    
-                }
+                $(".businessPlanContent").addClass("last");
+                Get(currentScreen);
+                populateSubs = setInterval(function () {
+                    if (!$(".businessPlanContent").hasClass("last") && $(".printContent").length == 0) {
+                        clearInterval(populateSubs);
+                        PopulateSubheaders();
+                    }
+                }, 100);
+
             });
 
             $("body").on("click", ".nav.secondary .subheaderList div", function () {
@@ -175,27 +218,81 @@
 
         });
 
-        function Get()
+        function Get(currentScreen)
         {
             var success = function (questions) {
                 currentQuestion = 0;
                 Questions = questions;
-                NextScreen();
+                if (category || currentScreen == "Get Started" || currentScreen == "My Restaurant")
+                    NextScreen(html);
+                else
+                    PrevScreen(html);
             };
 
             var header = $(".nav.primary .active").html();
             var category = $(".nav.secondary .active").html() || "";
             if (!category)
             {
-                if (header == "Concept")
-                    category = "Create Your Concept";
-                else if (header == "Business Plan")
-                    category = "Management Team";
-                else if (header == "Financials")
-                    category = "Basic Info";
-            }
+                if (header == "Get Started") {
+                    var header = "Welcome to Restaurant B Plan";
+                    var para = "Here are the instructions.";
 
-            Post("Get", { header: header, category: category, userId: currentUserId }, success);
+                    var html = "<div class='businessPlanContent'>";
+                    html += "<h2 style='text-align:center;margin-bottom:.5em;'>" + header + "</h2>";
+                    html += "<div class='instructions' style='margin: 2em 1em;'>" + para + "</div>";
+                    html += "</div>";
+
+                    currentQuestion = 0;
+                    Questions = [];
+                    PrevScreen(html);
+                }
+                else if (header == "My Restaurant") {
+                    var header = "My Restaurant";
+                    var para = "Blah blah";
+
+                    var html = "<div class='businessPlanContent'>";
+                    html += "<h2 style='text-align:center;margin-bottom:.5em;'>" + header + "</h2>";
+                    html += "<div class='instructions' style='margin: 2em 1em;'>" + para + "</div>";
+                    html += "</div>";
+
+                    currentQuestion = 0;
+                    Questions = [];
+
+                    if (currentScreen == "Get Started")
+                        NextScreen(html);
+                    else
+                        PrevScreen(html);
+                }
+                else if (header == "Edit Financials") {
+                    header = "Financials";
+                    category = "Basic Info";
+                    Post("Get", { header: header, category: category, userId: currentUserId }, success);
+                }
+                else if (header == "Plan Explained") {
+                    var header = "Plan Explained";
+                    var para = "Blah blah";
+
+                    var html = "<div class='businessPlanContent'>";
+                    html += "<h2 style='text-align:center;margin-bottom:.5em;'>" + header + "</h2>";
+                    html += "<div class='instructions' style='margin: 2em 1em;'>" + para + "</div>";
+                    html += "</div>";
+
+                    currentQuestion = 0;
+                    Questions = [];
+
+                    if (currentScreen == "Print")
+                        PrevScreen(html);
+                    else
+                        NextScreen(html);
+                }
+                else if (header == "Print") {
+                    PopulatePrint();
+                }
+            }
+            else {
+                header = "Financials";
+                Post("Get", { header: header, category: category, userId: currentUserId }, success);
+            }
         }
 
         function PopulateSubheaders()
@@ -203,24 +300,32 @@
             $(".btnSection").show();
             var subheaders = [];
             var header = $(".nav.primary div.active").html();
-            if(header == "Concept")
+            if (header == "Get Started")
             {
-                subheaders = ["Create Your Concept"];
+                //subheaders = ["Create Your Concept"];
+                //$(".scrollArrow").hide();
+                //$(".nav.secondary .subheaderList").css({ left: "50px" });
+
                 $(".scrollArrow").hide();
-                $(".nav.secondary .subheaderList").css({ left: "50px" });
+                $(".nav.secondary .subheaderList").hide();
+                $(".backBtn").hide();
             }
-            else if (header == "Business Plan")
+            else if (header == "My Restaurant")
             {
-                subheaders = ["Management Team", "Market Analysis", "Marketing Strategy", "Staffing", "Company Description", "Daily Operations", "Software and Controls", "Other Control Systems", "Inventory", "Accounting"];
-                $(".scrollArrow").show();
-                $(".nav.secondary .subheaderList").css({ left: "25px" });
+                //subheaders = ["Management Team", "Market Analysis", "Marketing Strategy", "Staffing", "Company Description", "Daily Operations", "Software and Controls", "Other Control Systems", "Inventory", "Accounting"];
+                //$(".scrollArrow").show();
+                //$(".nav.secondary .subheaderList").css({ left: "25px" });
+
+                $(".scrollArrow").hide();
+                $(".nav.secondary .subheaderList").hide();
+                $(".backBtn").hide();
             }
-            else if(header == "Financials")
+            else if (header == "Edit Financials")
             {
                 subheaders = ["Basic Info", "Capital Budget", "Sales Projection", "Hourly Labor", "Expenses", "Investment"];
                 $(".scrollArrow").hide();
-                $(".nav.secondary .subheaderList").css({ left: "50px" });
-
+                $(".nav.secondary .subheaderList").css({ left: "50px" }).show();
+                $(".backBtn").show();
             }
 
             $(".nav.secondary .subheaderList").html("");
@@ -233,8 +338,13 @@
 
         }
 
-        function PopulateContent()
+        function PopulateContent(html)
         {
+            if (html) {
+                $(".fromDb").html(html);
+                return;
+            }
+
             if (!Questions.length) {
                 $(".fromDb").html("");
                 return;
@@ -486,11 +596,11 @@
             }
         }
 
-        function NextScreen()
+        function NextScreen(html)
         {
             $(".main").animate({ "margin-left": "0" }, 200, function () {
                 $(".main").fadeOut(100, function () {
-                    PopulateContent();
+                    PopulateContent(html);
                     var margin = ($(window).width() - 800) / 2;
                     $(".main").css("margin-left", margin + 100 + "px");
                     $(".main").fadeIn(100, function () {
@@ -501,11 +611,11 @@
             });
         }
 
-        function PrevScreen() {
+        function PrevScreen(html) {
             var margin = ($(window).width() - 800) / 2;
             $(".main").animate({ "margin-left": margin + 100 + "px" }, 200, function () {
                 $(".main").fadeOut(100, function () {
-                    PopulateContent();
+                    PopulateContent(html);
                     $(".main").css("margin-left", "0");
                     $(".main").fadeIn(100, function () {
                         $(".main").css("margin-left", "auto");
@@ -537,7 +647,6 @@
                 }
 
                 var success = function (answers) {
-                    console.log(answers);
                     for (var x = 0; x < Questions.length; x++) {
                         for (var y = 0; y < answers.length; y++) {
                             if (Questions[x].Id == answers[y].QuestionId) {
@@ -609,6 +718,7 @@
 
         function SaveSettings()
         {
+            //Deprecated TODO: Fix this
             Post("SaveUser", { id: currentUserId, name: $("#SettingsName").val(), email: $("#SettingsEmail").val(), restaurant: $("#SettingsRestaurant").val() });
 
             $(".myAccount a").html($("#SettingsName").val());
@@ -653,21 +763,18 @@
 
         function SendContact()
         {
-            var success = function (error) {
-                if (error)
-                    $(".cancelError").html(error);
-                else {
-                    alert("Thank you for using Restaurant B Plan. Your subscription has been cancelled. You will no longer be charged."); //TODO: Messagebox
-                    $(".cancelDialog").fadeOut();
-                    $(".settingsDialog").fadeOut();
-                }
-            };
-            Post("SendEmail", { userId: currentUserId, body: $(".contactDialog textarea").val() });
+            SendEmail("Contact", $(".contactDialog textarea").val());
+
             $(".contactDialog .contactError").html("Thanks, your email has been sent.");
             setTimeout(function () {
                 $(".contactDialog").fadeOut();
                 $(".modal-backdrop").fadeOut();
             }, 1500);
+        }
+
+        function SendEmail(subject, body) {
+            body += "%3Cbr/%3E%3Cbr/%3E" + new Date();
+            Post("SendEmail", { userId: currentUserId, subject: subject, body: body });
         }
 
         function SignOut() {
@@ -686,7 +793,18 @@
         <input type="hidden" runat="server" id="RestaurantName" />
         <input type="hidden" runat="server" id="ConceptOverview" />
         <input type="hidden" runat="server" id="NewUser" />
+        <input type="hidden" runat="server" id="ProspectId" />
         <div class="modal-backdrop"></div>
+        <div class="signup">
+            <div class="signupHeader">
+                Restaurant B Plan: Create Account
+            </div>
+            <input id="signupName" placeholder="Full Name" type="text" style="margin-top: 20px;" />
+            <input id="signupEmail" placeholder="Email Address" type="text" />
+            <input id="signupPassword" placeholder="Password" type="password" />
+            <input id="signupConfirm" placeholder="Confirm Password" type="password" style="margin-bottom: 20px;" />
+            <div class="signupBtn">Sign up</div>
+        </div>
         <div class="helpDialog modal-dialog">
             <div class="dialogClose">X</div>
             <h3></h3>
@@ -742,9 +860,10 @@
         </div>
         <div class="subheader">
             <div class="nav primary">
-                <div class="active" style="margin-left:40px;">Concept</div>
-                <div>Business Plan</div>
-                <div>Financials</div>
+                <div class="active" style="margin-left:40px;">Get Started</div>
+                <div>My Restaurant</div>
+                <div>Edit Financials</div>
+                <div>Plan Explained</div>
                 <div>Print</div>
                 <div class="restaurantName"></div>
             </div>
@@ -753,21 +872,20 @@
            <img class="scrollArrow left" style="float:left;" src="../img/leftArrow.png" />
            <div class="nav secondary">
                <div class="subheaderList">
-                    <div class="active" style="margin-left:0;left:50px;">Create Your Concept</div>
+                    <div class="active" style="margin-left:0;left:50px;"></div>
                </div>
             </div>
             <img class="scrollArrow right" style="float:right;" src="../img/rightArrow.png" />
             <div class="fromDb" style="margin:5%;">
                 <div class="businessPlanContent">
-                    <h2 style="text-align:center;margin-bottom:.5em;">Concept</h2>
+                    <h2 style="text-align:center;margin-bottom:.5em;">Welcome to Restaurant B Plan</h2>
                     <div class="instructions" style="margin: 2em 1em;">
-                        This will hopefully be the most enjoyable and important portion of your effort to open your own restaurant. In this section, you're going to sell the concept of your restaurant.  
-                        <br><br>You ready?<br>
+                        Instructions on how this we
                     </div>
                 </div>
             </div>
             <div class="btnSection">
-                <div class="backBtn btn">Back</div>
+                <div class="backBtn btn" style="display:none;">Back</div>
                 <div class="nextBtn btn">Next</div>
             </div>
         </div>

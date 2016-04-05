@@ -33,6 +33,9 @@ public class Users : BaseClass<Users>
     [NonDB]
     public CreditCard CreditCard { get; set; }
 
+    [NonDB]
+    public Restaurant Restaurant { get; set; }
+
     #endregion
 
 }

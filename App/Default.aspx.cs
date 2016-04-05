@@ -16,27 +16,33 @@ public partial class App_Default : System.Web.UI.Page
         Users user = HttpContext.Current.Session["CurrentUser"] as Users;
         if (user == null || user.Id == 0)
         {
-            if (ConfigurationManager.AppSettings["IsProduction"] == "true")
+            Prospect prospect = HttpContext.Current.Session["CurrentProspect"] as Prospect;
+            if (prospect != null)
+                ProspectId.Value = prospect.Id.ToString();
+            else if (ConfigurationManager.AppSettings["IsProduction"] == "true")
                 Response.Redirect("http://RestaurantBPlan.com");
             else
                 user = Users.LoadById(1);
         }
-           
-        CurrentUserId.Value = user.Id.ToString();
-        UserName.Value = user.Name;
-        TimeSpan span = DateTime.Now - user.Joined;
-        if (span.Days <= 0)
-            NewUser.Value = "true";
-
-        List<Restaurant> restaurants = Restaurant.LoadByPropName("UserId", user.Id.ToString());
-        if (restaurants.Count > 0)
-            RestaurantName.Value = restaurants[0].Name;
-
-        List<Question> questions = Question.Get("Concept", "Create Your Concept", 1);
-        if(questions.Count > 0)
+        else
         {
-            ConceptOverview.Value = questions[0].Title;
+            CurrentUserId.Value = user.Id.ToString();
         }
+           
+        //UserName.Value = user.Name;
+        //TimeSpan span = DateTime.Now - user.Joined;
+        //if (span.Days <= 0)
+        //    NewUser.Value = "true";
+
+        //List<Restaurant> restaurants = Restaurant.LoadByPropName("UserId", user.Id.ToString());
+        //if (restaurants.Count > 0)
+        //    RestaurantName.Value = restaurants[0].Name;
+
+        //List<Question> questions = Question.Get("Concept", "Create Your Concept", 1);
+        //if(questions.Count > 0)
+        //{
+        //    ConceptOverview.Value = questions[0].Title;
+        //}
     }
 
     [WebMethod]
@@ -57,23 +63,27 @@ public partial class App_Default : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static void SaveUser(string id, string name, string email, string restaurant)
+    public static Users CreateUser(Users user, int prospectId)
     {
-        int userId;
-        if (int.TryParse(id, out userId))
-        {
-            Users user = Users.LoadById(userId);
-            user.Name = name;
-            user.Email = email;
-            user.Save();
+        user.Joined = DateTime.Now;
+        user.Save();
 
-            List<Restaurant> restaurants = Restaurant.LoadByPropName("UserId", id);
-            if(restaurants.Count == 1)
-            {
-                restaurants[0].Name = restaurant;
-                restaurants[0].Save();
-            }
-        }
+        Prospect prospect = Prospect.LoadById(prospectId);
+
+        Restaurant restaurant = new Restaurant();
+        restaurant.Name = prospect.Restaurant;
+        restaurant.UserId = user.Id;
+        restaurant.Save();
+
+        user.Restaurant = restaurant;
+
+        string body = string.Format("UserId: {0}<br>Name: {1}<br>Email: {2}<br><br>{3}", user.Id, user.Name, user.Email, restaurant.Name);
+        Email email = new Email("RestaurantBPlan@RestaurantBPlan.com", "williamallenparks@gmail.com", "New Sign Up", body);
+        email.Send();
+
+        HttpContext.Current.Session["CurrentUser"] = user;
+
+        return user;
     }
 
     [WebMethod]
@@ -132,14 +142,17 @@ public partial class App_Default : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static void SendEmail(int userId, string body)
+    public static void SendEmail(int userId, string subject, string body)
     {
-        Users user = Users.LoadById(userId);
-        body = string.Format("UserId: {0}<br>Name: {1}<br>Email: {2}<br><br>{3}", user.Id, user.Name, user.Email, body);
+        if (userId > 0)
+        {
+            Users user = Users.LoadById(userId);
+            body = string.Format("UserId: {0}<br>Name: {1}<br>Email: {2}<br><br>{3}", user.Id, user.Name, user.Email, body);
+        }
         //body = body.Replace("%20", " ").Replace("%3Cbr%3E", "<br/>").Replace("%3Cbr/%3E", "<br/>");
         //Email email1 = new Email("RestaurantBPlan@RestaurantBPlan.com", "myownerbox@gmail.com", "App Contact", body);
         //email1.Send();
-        Email email2 = new Email("RestaurantBPlan@RestaurantBPlan.com", "williamallenparks@gmail.com", "App Contact", body);
+        Email email2 = new Email("RestaurantBPlan@RestaurantBPlan.com", "williamallenparks@gmail.com", subject, body);
         email2.Send();
     }
 

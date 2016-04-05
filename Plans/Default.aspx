@@ -16,7 +16,7 @@
     <script type="text/javascript">
         
         var priceRnd;
-        var prices = [77, 97, 127, 147];
+        var prices = [177, 197, 227, 247];
         var completePrices = [49, 79, 119, 149];
         var price;
         var completePrice;
@@ -89,7 +89,7 @@
             $(".payment.signup .pitchButton").click(function () {
 
                 var error = false;
-                $("#SignupName, #SignupEmail, #SignuPassword").removeClass("error")
+                $("#SignupName, #SignupEmail, #SignupPassword").removeClass("error")
                 if (!$("#SignupName").val()) {
                     $("#SignupName").addClass("error");
                     error = true;
@@ -389,7 +389,7 @@
                 <div class="playButton" onclick="SignupClick('Financial Plan Only');">START FOR FREE</div>
             </div>
             <div class="priceColumn">
-                <div class="oldPrice strike">$397</div>
+                <div class="oldPrice strike">$497</div>
                 <div class="actualPrice price" style="margin-left: -6px;">$49</div>
                 <div class="priceTitle">Business Plan</div>
                 <div class="priceItem">Step by step app for building a professional business plan</div>

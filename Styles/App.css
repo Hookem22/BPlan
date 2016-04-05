@@ -67,7 +67,7 @@
 {
     font-weight: 400;
     padding: 16px 0 10px;
-    margin: 0 25px;
+    margin: 0 20px;
     line-height: 16px;
 }
 .nav div.restaurantName
@@ -75,6 +75,7 @@
     color: #1a384b;
     float: right;
     font-size: 20px;
+    margin-left: 0;
 }
 .nav div.restaurantName:hover
 {
@@ -666,3 +667,58 @@
     color: #FFF;
     cursor: pointer;
 }
+
+.signup {
+    position: absolute;
+    left: 50%;
+    width: 640px;
+    margin: 137px -320px 40px;
+    -webkit-box-shadow: 0 1px 1px #999;
+    -moz-box-shadow: 0 1px 1px #999;
+    box-shadow: 0 1px 1px #999;
+    background-color: #FFF;
+    z-index: 2000;
+    border-radius: 3px;
+    display: none;
+}
+.signupHeader {
+    background-color: #f7f7f7;
+    font-size: 27px !important;
+    line-height: 31px;
+    padding: 24px;
+    text-align: center;
+    border-radius: 3px;
+}
+.signup input {
+    padding: 5px 15px;
+    height: 55px;
+    font-size: 18px;
+    font-weight: 200;
+    margin-bottom: 14px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+    width: 500px;
+    margin-left: 69px;
+}
+.signupBtn {
+    background: #2a94d6;
+    border: 1px solid #2a94d6;
+    color: #fff;
+    cursor: pointer;
+    font-size: 24px;
+    border-radius: 32px;
+    display: inline;
+    padding: 10px 206px;
+    margin: 0px 70px 24px 70px;
+    float: left;
+}
+.signupBtn:hover {
+    background: #2585c1;
+    border: 1px solid #2585c1;
+}
+input.error {
+    border: 1px solid #a94442;
+    color: #333333;
+}
+
