@@ -430,42 +430,42 @@ public class WordDoc
         List<Question> questions = Question.Get("Financials", "Hourly Labor", currentUserId, false);
         string serverRate = questions.ByTitle("Server Rate", "0.00");
         string serverHours = questions.ByTitle("Server Average Number of Hours", "0");
-        string serverShifts = questions.ByTitle("Server Shifts per Day", "0");
+        string serverShifts = questions.ByTitle("Average Servers per Day", "0");
         double serverCost = (double.Parse(serverRate) * double.Parse(serverHours) * double.Parse(serverShifts));
 
         string hostRate = questions.ByTitle("Host / Hostess Rate", "0.00");
         string hostHours = questions.ByTitle("Host / Hostess Average Number of Hours", "0");
-        string hostShifts = questions.ByTitle("Host / Hostess Shifts per Day", "0");
+        string hostShifts = questions.ByTitle("Hosts / Hostesses Per Day", "0");
         double hostCost = (double.Parse(hostRate) * double.Parse(hostHours) * double.Parse(hostShifts));
 
         string busserRate = questions.ByTitle("Busser Rate", "0.00");
         string busserHours = questions.ByTitle("Busser Average Number of Hours", "0");
-        string busserShifts = questions.ByTitle("Busser Shifts per Day", "0");
+        string busserShifts = questions.ByTitle("Bussers per Day", "0");
         double busserCost = (double.Parse(busserRate) * double.Parse(busserHours) * double.Parse(busserShifts));
 
         string bartenderRate = questions.ByTitle("Bartender Rate", "0.00");
         string bartenderHours = questions.ByTitle("Bartender Average Number of Hours", "0");
-        string bartenderShifts = questions.ByTitle("Bartender Shifts per Day", "0");
+        string bartenderShifts = questions.ByTitle("Number of Bartenders per Day", "0");
         double bartenderCost = (double.Parse(bartenderRate) * double.Parse(bartenderHours) * double.Parse(bartenderShifts));
 
         string dishroomRate = questions.ByTitle("Dishroom Rate", "0.00");
         string dishroomHours = questions.ByTitle("Dishroom Average Number of Hours", "0");
-        string dishroomShifts = questions.ByTitle("Dishroom Shifts per Day", "0");
+        string dishroomShifts = questions.ByTitle("Dishroom per Day", "0");
         double dishroomCost = (double.Parse(dishroomRate) * double.Parse(dishroomHours) * double.Parse(dishroomShifts));
 
         string prepCookRate = questions.ByTitle("Prep Cook Rate", "0.00");
         string prepCookHours = questions.ByTitle("Prep Cook Average Number of Hours", "0");
-        string prepCookShifts = questions.ByTitle("Prep Cook Shifts per Day", "0");
+        string prepCookShifts = questions.ByTitle("Prep Cooks per Day", "0");
         double prepCookCost = (double.Parse(prepCookRate) * double.Parse(prepCookHours) * double.Parse(prepCookShifts));
 
         string lineCookRate = questions.ByTitle("Line Cook Rate", "0.00");
         string lineCookHours = questions.ByTitle("Line Cook Average Number of Hours", "0");
-        string lineCookShifts = questions.ByTitle("Line Cook Shifts per Day", "0");
+        string lineCookShifts = questions.ByTitle("Line Cook per Day", "0");
         double lineCookCost = (double.Parse(lineCookRate) * double.Parse(lineCookHours) * double.Parse(lineCookShifts));
 
         string expoRate = questions.ByTitle("Expo Rate", "0.00");
         string expoHours = questions.ByTitle("Expo Average Number of Hours", "0");
-        string expoShifts = questions.ByTitle("Expo Shifts per Day", "0");
+        string expoShifts = questions.ByTitle("Expos per Day", "0");
         double expoCost = (double.Parse(expoRate) * double.Parse(expoHours) * double.Parse(expoShifts));
         
         //TODO: Missing Cashiers
@@ -487,8 +487,6 @@ public class WordDoc
         foreach (int cover in CoversPerDay) totalCovers += cover;
         YearlyHourlyCosts = laborCost * 7 * 52;
         tbl.AddRow(new string[] { ToPercent(laborCost * 700 / totalSales), (laborCost * 7).ToString("#,##0"), (expoCost * 7).ToString("#,##0"), (lineCookCost * 7).ToString("#,##0"), (prepCookCost * 7).ToString("#,##0"), (dishroomCost * 7).ToString("#,##0"), "", "0", (bartenderCost * 7).ToString("#,##0"), (busserCost * 7).ToString("#,##0"), (hostCost * 7).ToString("#,##0"), (serverCost * 7).ToString("#,##0"), "Labor", totalSales.ToString("#,##0"), totalCovers.ToString("#,###"), "WEEK", "" }, lastStyle, false);
-
-
     }
 
     static void FinancialsIncomeDetailed(WordprocessingDocument wordDocument)

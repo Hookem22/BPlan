@@ -32,24 +32,19 @@
             }
             else {
                 currentUserId = +$("#CurrentUserId").val();
-                //if ($("#NewUser").val())
-                //{
-                //    $(".helpDialog h3").html("Welcome " + $("#UserName").val() + "!");
-                //    $(".helpDialog").show();
-                //    $(".modal-backdrop").show();
-                //}
-                $(".myAccount a").html($("#UserName").val());
-                $(".restaurantName").html($("#RestaurantName").val());
-                //$(".fromDb .instructions").html($("#ConceptOverview").val());
 
-                //TOOD: Get user
-                //var success = function (questions) {
-                //    currentQuestion = 0;
-                //    Questions = questions;
-                //};
-                //Post("Get", { header: "Concept", category: "Create Your Concept", userId: currentUserId }, success);
+                var success = function (user) {
+                    currentUser = user;
+                    $(".myAccount a").html(user.Name);
+                    $(".restaurantName").html(user.Restaurant.Name);
+                };
+                Post("GetUser", { userId: currentUserId }, success);
+
+                var questionsSuccess = function(results) {
+                    Questions = results;
+                };
+                Post("GetQuestions", { userId: currentUserId }, questionsSuccess);
             }
-
 
             $(".signupBtn").click(function() {
                 var error = false;
@@ -220,14 +215,8 @@
 
         function Get(currentScreen)
         {
-            var success = function (questions) {
-                currentQuestion = 0;
-                Questions = questions;
-                if (category || currentScreen == "Get Started" || currentScreen == "My Restaurant")
-                    NextScreen(html);
-                else
-                    PrevScreen(html);
-            };
+            if (currentScreen == "My Restaurant")
+                SaveRestaurant();
 
             var header = $(".nav.primary .active").html();
             var category = $(".nav.secondary .active").html() || "";
@@ -242,31 +231,47 @@
                     html += "<div class='instructions' style='margin: 2em 1em;'>" + para + "</div>";
                     html += "</div>";
 
-                    currentQuestion = 0;
-                    Questions = [];
                     PrevScreen(html);
                 }
                 else if (header == "My Restaurant") {
-                    var header = "My Restaurant";
-                    var para = "Blah blah";
+                    var rst = currentUser.Restaurant;
+                    var header = rst.Name;
+                    var para = "<div class='multiTextGroup' style='margin: 0 20px 30px 50px'>";
+                    para += "<div class='multiText' style='clear:left;'><div style='float:left;max-width:290px;'>Kind of Food</div>";
+                    para += "<input id='Food' type='text' value='" + rst.Food + "'></div>";
+                    para += "<div class='multiText' ><div style='float:left;max-width:290px;'>Restaurant Style</div>";
+                    para += "<select id='RestaurantType'><option value='Fine Dining'>Fine Dining</option><option value='Fast Casual'>Fast Casual</option>";
+                    para += "<option value='Casual'>Casual</option><option value='Trailer'>Trailer</option></select></div>";
+                    para += "<div class='multiText' style='clear:left;'><div style='float:left;max-width:290px;'>Number of Dining Seats</div>";
+                    para += "<input id='Size' type='text' value='" + rst.Size + "'></div>";
+                    para += "<div class='multiText' ><div style='float:left;max-width:290px;'>Square Footage</div>";
+                    para += "<input id='SquareFootage' type='text' value='" + rst.SquareFootage + "'></div>";
+                    para += "<div class='multiText' style='clear:left;'><div style='float:left;max-width:290px;'>City</div>";
+                    para += "<input id='City' type='text' value='" + rst.City + "'></div>";
+                    para += "<div class='multiText' ><div style='float:left;max-width:290px;'>Projected Opening Date</div>";
+                    para += "<input id='Opening' type='text' value='" + rst.Opening + "'></div>";
+                    para += "</div>";
 
                     var html = "<div class='businessPlanContent'>";
                     html += "<h2 style='text-align:center;margin-bottom:.5em;'>" + header + "</h2>";
-                    html += "<div class='instructions' style='margin: 2em 1em;'>" + para + "</div>";
+                    html += para;
                     html += "</div>";
 
-                    currentQuestion = 0;
-                    Questions = [];
+                    var populate = function () {
+                        $(".multiTextGroup select").val(rst.RestaurantType);
+                    };
 
                     if (currentScreen == "Get Started")
-                        NextScreen(html);
+                        NextScreen(html, populate);
                     else
-                        PrevScreen(html);
+                        PrevScreen(html, populate);
                 }
                 else if (header == "Edit Financials") {
-                    header = "Financials";
-                    category = "Basic Info";
-                    Post("Get", { header: header, category: category, userId: currentUserId }, success);
+                    currentQuestion = 0;
+                    if (currentScreen == "Get Started" || currentScreen == "My Restaurant")
+                        NextScreen();
+                    else
+                        PrevScreen();
                 }
                 else if (header == "Plan Explained") {
                     var header = "Plan Explained";
@@ -276,9 +281,6 @@
                     html += "<h2 style='text-align:center;margin-bottom:.5em;'>" + header + "</h2>";
                     html += "<div class='instructions' style='margin: 2em 1em;'>" + para + "</div>";
                     html += "</div>";
-
-                    currentQuestion = 0;
-                    Questions = [];
 
                     if (currentScreen == "Print")
                         PrevScreen(html);
@@ -290,8 +292,14 @@
                 }
             }
             else {
-                header = "Financials";
-                Post("Get", { header: header, category: category, userId: currentUserId }, success);
+                for (var i = 0; i < Questions.length; i++) {
+                    if (Questions[i].QuestionSheet.Name == category) {
+                        currentQuestion = i;
+                        break;
+                    }
+                }
+
+                NextScreen();
             }
         }
 
@@ -338,10 +346,13 @@
 
         }
 
-        function PopulateContent(html)
+        function PopulateContent(html, func)
         {
             if (html) {
                 $(".fromDb").html(html);
+                if (func) {
+                    func();
+                }
                 return;
             }
 
@@ -349,10 +360,20 @@
                 $(".fromDb").html("");
                 return;
             }
+
+            //Set subheader
+            $(".subheaderList div").each(function () {
+                if ($(this).html() == Questions[currentQuestion].QuestionSheet.Name) {
+                    $(this).addClass("active");
+                } else {
+                    $(this).removeClass("active");
+                }
+            });
+
             //Overview
-            if (currentQuestion == 0 && Questions[currentQuestion].Title)
+            if (Questions[currentQuestion].Id == -1 && Questions[currentQuestion].Title)
             {
-                var question = Questions[0];
+                var question = Questions[currentQuestion];
                 var html = "<div class='businessPlanContent'>";
                 var header = $(".nav.primary div.active").html();
                 var para = question.Title;
@@ -369,30 +390,30 @@
                 $(".fromDb").html(html);
                 return;
             }
-            else if (currentQuestion == 0)
+            else if (Questions[currentQuestion].Id == -1)
             {
                 currentQuestion++;
             }
 
             //Summary
-            if (!Questions[currentQuestion] && Questions[currentQuestion - 1] && Questions[0].Help) {
-                var question = Questions[0];
-                var html = "<div class='businessPlanContent'>";
-                var header = $(".nav.secondary div.active").html();
-                var para = question.Help;
-                if (para.indexOf("{") >= 0 && para.indexOf("}") >= 0) {
-                    header = para.substring(para.indexOf("{") + 1);
-                    header = header.substring(0, header.indexOf("}"));
-                    para = para.substring(para.indexOf("}") + 1);
-                    para = RemoveFrontBreaks(para);
-                }
-                html += "<h2 style='text-align:center;margin-bottom:.5em;'>" + header + "</h2>";
-                html += "<div class='instructions' style='margin: 2em 1em;'>" + para + "</div>";
-                html += "</div>";
+            //if (!Questions[currentQuestion] && Questions[currentQuestion - 1] && Questions[0].Help) {
+            //    var question = Questions[0];
+            //    var html = "<div class='businessPlanContent'>";
+            //    var header = $(".nav.secondary div.active").html();
+            //    var para = question.Help;
+            //    if (para.indexOf("{") >= 0 && para.indexOf("}") >= 0) {
+            //        header = para.substring(para.indexOf("{") + 1);
+            //        header = header.substring(0, header.indexOf("}"));
+            //        para = para.substring(para.indexOf("}") + 1);
+            //        para = RemoveFrontBreaks(para);
+            //    }
+            //    html += "<h2 style='text-align:center;margin-bottom:.5em;'>" + header + "</h2>";
+            //    html += "<div class='instructions' style='margin: 2em 1em;'>" + para + "</div>";
+            //    html += "</div>";
 
-                $(".fromDb").html(html);
-                return;
-            }
+            //    $(".fromDb").html(html);
+            //    return;
+            //}
 
             if (Questions[currentQuestion].QuestionSheet.Header == "Financials") {
                 var html = "";
@@ -415,8 +436,9 @@
                         html += "<div style='clear:both;'></div>";
                     }
 
-                    var oddQuestions = ["Management & Chef", "Selling & Promotions", "Electricity", "Dues & Subscriptions", "Printed Materials", "Water"];
-                    var evenQuestions = ["Advertising", "Research", "Gas", "Trash Removal"];
+                    var oddQuestions = ["Management & Chef", "Selling & Promotions", "Electricity", "Dues & Subscriptions", "Printed Materials", "Water", "Host / Hostess Rate", "Hosts / Hostesses Per Day",
+                        "Bartender Rate", "Number of Bartenders per Day", "Prep Cook Rate", "Prep Cooks per Day", "Expo Rate", "Expos per Day"];
+                    var evenQuestions = ["Advertising", "Research", "Gas", "Trash Removal", "Host / Hostess Average Number of Hours", "Bartender Average Number of Hours", "Prep Cook Average Number of Hours", "Expo Average Number of Hours"];
                     var even = (i % 2 && !(oddQuestions.indexOf(Questions[currentQuestion + i].Title) >= 0)) || evenQuestions.indexOf(Questions[currentQuestion + i].Title) >= 0 ? "even" : "";
                     style += even && !Questions[currentQuestion + i].Options ? "" : "clear:left;";
 
@@ -596,11 +618,11 @@
             }
         }
 
-        function NextScreen(html)
+        function NextScreen(html, func)
         {
             $(".main").animate({ "margin-left": "0" }, 200, function () {
                 $(".main").fadeOut(100, function () {
-                    PopulateContent(html);
+                    PopulateContent(html, func);
                     var margin = ($(window).width() - 800) / 2;
                     $(".main").css("margin-left", margin + 100 + "px");
                     $(".main").fadeIn(100, function () {
@@ -611,11 +633,11 @@
             });
         }
 
-        function PrevScreen(html) {
+        function PrevScreen(html, func) {
             var margin = ($(window).width() - 800) / 2;
             $(".main").animate({ "margin-left": margin + 100 + "px" }, 200, function () {
                 $(".main").fadeOut(100, function () {
-                    PopulateContent(html);
+                    PopulateContent(html, func);
                     $(".main").css("margin-left", "0");
                     $(".main").fadeIn(100, function () {
                         $(".main").css("margin-left", "auto");
@@ -623,6 +645,17 @@
                     });
                 });
             });
+        }
+
+        function SaveRestaurant() {
+            currentUser.Restaurant.Food = $("#Food").val();
+            currentUser.Restaurant.RestaurantType = $("#RestaurantType").val();
+            currentUser.Restaurant.Size = $("#Size").val();
+            currentUser.Restaurant.SquareFootage = $("#SquareFootage").val();
+            currentUser.Restaurant.City = $("#City").val();
+            currentUser.Restaurant.Opening = $("#Opening").val();
+
+            Post("SaveRestaurant", { restaurant: currentUser.Restaurant });
         }
 
         function SaveAnswer()
@@ -704,22 +737,22 @@
 
         function OpenSettings()
         {
-            var success = function (user) {
-                $("#SettingsName").val(user.Name);
-                $("#SettingsRestaurant").val($(".restaurantName").html());
-                $("#SettingsEmail").val(user.Email);
-                $(".passwordError, .cancelError").html("");
+            $("#SettingsName").val(currentUser.Name);
+            $("#SettingsRestaurant").val(currentUser.Restaurant.Name);
+            $("#SettingsEmail").val(currentUser.Email);
+            $(".passwordError, .cancelError").html("");
 
-                $(".settingsDialog").show();
-                $(".modal-backdrop").show();
-            };
-            Post("GetUser", { id: currentUserId }, success);
+            $(".settingsDialog").show();
+            $(".modal-backdrop").show();
         }
 
         function SaveSettings()
         {
-            //Deprecated TODO: Fix this
-            Post("SaveUser", { id: currentUserId, name: $("#SettingsName").val(), email: $("#SettingsEmail").val(), restaurant: $("#SettingsRestaurant").val() });
+            currentUser.Name = $("#SettingsName").val();
+            currentUser.Email = $("#SettingsEmail").val();
+            currentUser.Restaurant.Name = $("#SettingsRestaurant").val();
+
+            Post("SaveUser", { userId: currentUser.Id, name: currentUser.Name, email: currentUser.Email, restaurantName: currentUser.Restaurant.Name });
 
             $(".myAccount a").html($("#SettingsName").val());
             $(".restaurantName").html($("#SettingsRestaurant").val());
@@ -789,10 +822,6 @@
 <body>
     <form id="form1" runat="server">
         <input type="hidden" runat="server" id="CurrentUserId" />
-        <input type="hidden" runat="server" id="UserName" />
-        <input type="hidden" runat="server" id="RestaurantName" />
-        <input type="hidden" runat="server" id="ConceptOverview" />
-        <input type="hidden" runat="server" id="NewUser" />
         <input type="hidden" runat="server" id="ProspectId" />
         <div class="modal-backdrop"></div>
         <div class="signup">
@@ -825,7 +854,7 @@
                 <div class="dialogTitle">Restaurant:</div><input type="text" id="SettingsRestaurant" />
                 <div class="dialogTitle">Email:</div><input type="text" id="SettingsEmail" />
                 <div class="dialogTitle">Password:</div><div class="btn" onclick="$('.passwordDialog').show();">Change Password</div>
-                <div class="dialogTitle">Subscription:</div><div class="btn" onclick="$('.cancelDialog').show();">Cancel Subscription</div>
+<%--                <div class="dialogTitle">Subscription:</div><div class="btn" onclick="$('.cancelDialog').show();">Cancel Subscription</div>--%>
             </div>
             <div class="btn dialogBtn" onclick="SaveSettings();">Save</div>
         </div>

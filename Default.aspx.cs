@@ -72,7 +72,7 @@ public partial class Default : System.Web.UI.Page
         //}
         //return error;
     }
-
+    /*
     static string BuyPlan(Users user)
     {
         try
@@ -195,7 +195,7 @@ public partial class Default : System.Web.UI.Page
         //}
 
         //return "";
-    }
+    }*/
 
     [WebMethod]
     public static string Login(string email, string password)

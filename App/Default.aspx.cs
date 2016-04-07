@@ -22,7 +22,7 @@ public partial class App_Default : System.Web.UI.Page
             else if (ConfigurationManager.AppSettings["IsProduction"] == "true")
                 Response.Redirect("http://RestaurantBPlan.com");
             else
-                user = Users.LoadById(1);
+                CurrentUserId.Value = "2";
         }
         else
         {
@@ -52,14 +52,27 @@ public partial class App_Default : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static Users GetUser(string id)
+    public static Users GetUser(string userId)
     {
-        int userId;
-        if(int.TryParse(id, out userId))
+        int id;
+        if(int.TryParse(userId, out id))
         {
-            return Users.LoadById(userId);
+            Users user = Users.LoadById(id);
+            user.Restaurant = Restaurant.LoadByUserId(user.Id);
+            return user;
         }
         return new Users();
+    }
+
+    [WebMethod]
+    public static List<Question> GetQuestions(string userId)
+    {
+        int id;
+        if (int.TryParse(userId, out id))
+        {
+            return Question.GetFinancials(id);
+        }
+        return new List<Question>();
     }
 
     [WebMethod]
@@ -71,8 +84,25 @@ public partial class App_Default : System.Web.UI.Page
         Prospect prospect = Prospect.LoadById(prospectId);
 
         Restaurant restaurant = new Restaurant();
-        restaurant.Name = prospect.Restaurant;
         restaurant.UserId = user.Id;
+        restaurant.Name = prospect.Restaurant;
+        restaurant.Food = prospect.Food;
+        restaurant.RestaurantType = prospect.RestaurantType;
+        switch (prospect.Size)
+        {
+            case "Intimate":
+                restaurant.Size = 50;
+                break;
+            case "Average":
+                restaurant.Size = 100;
+                break;
+            case "Large":
+                restaurant.Size = 150;
+                break;
+        }
+        restaurant.SquareFootage = restaurant.Size * 15;
+        restaurant.City = prospect.City;
+        restaurant.Opening = prospect.Opening;
         restaurant.Save();
 
         user.Restaurant = restaurant;
@@ -85,6 +115,30 @@ public partial class App_Default : System.Web.UI.Page
 
         return user;
     }
+
+    [WebMethod]
+    public static void SaveUser(string userId, string name, string email, string restaurantName)
+    {
+        int id;
+        if (int.TryParse(userId, out id))
+        {
+            Users user = Users.LoadById(id);
+            user.Name = name;
+            user.Email = email;
+            user.Save();
+
+            Restaurant restaurant = Restaurant.LoadByUserId(user.Id);
+            restaurant.Name = restaurantName;
+            restaurant.Save();
+        }
+    }
+
+    [WebMethod]
+    public static void SaveRestaurant(Restaurant restaurant)
+    {
+        restaurant.Save();
+    }
+
 
     [WebMethod]
     public static string SavePassword(string id, string oldPassword, string newPassword)

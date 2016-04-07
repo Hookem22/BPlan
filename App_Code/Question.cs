@@ -131,6 +131,17 @@ public class Question : BaseClass<Question>
 
     }
 
+    public static List<Question> GetFinancials(int userId)
+    {
+        List<Sheet> sheets = Sheet.LoadByPropName("Header", "Financials").OrderBy(x => x.Id).ToList();
+        List<Question> questions = new List<Question>();
+        foreach (Sheet sheet in sheets)
+        {
+            questions.AddRange(Get(sheet.Header, sheet.Name, userId));
+        }
+        return questions;
+    }
+
 }
 
 public static class QuestionList

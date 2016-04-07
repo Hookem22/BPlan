@@ -19,5 +19,4 @@ public class Sheet : BaseClass<Sheet>
     public string Overview { get; set; }
 
     public string Summary { get; set; }
-
 }
