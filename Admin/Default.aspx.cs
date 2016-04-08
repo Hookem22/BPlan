@@ -23,9 +23,9 @@ public partial class Admin_Default : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static List<Question> Get(string header, string category, int userId)
-    {        
-        return Question.Get(header, category, userId);
+    public static List<Question> Get(string header, string category, int restaurantId)
+    {
+        return Question.Get(header, category, restaurantId);
     }
 
     [WebMethod]

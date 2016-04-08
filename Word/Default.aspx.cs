@@ -13,10 +13,10 @@ public partial class Word_Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        int userId = 0;
-        if (!string.IsNullOrEmpty(Request.QueryString["u"]))
+        int restaurantId = 0;
+        if (!string.IsNullOrEmpty(Request.QueryString["r"]))
         {
-            int.TryParse(Request.QueryString["u"], out userId);
+            int.TryParse(Request.QueryString["r"], out restaurantId);
         }
         string header = "";
         if (!string.IsNullOrEmpty(Request.QueryString["header"]))
@@ -33,13 +33,11 @@ public partial class Word_Default : System.Web.UI.Page
                 mainPart.Document = new Document();
                 Body body = mainPart.Document.AppendChild(new Body());
 
-                WordDoc.Print(wordDocument, header, userId);
+                WordDoc.Print(wordDocument, header, restaurantId);
             }
 
-            string name = "";
-            List<Restaurant> restaurants = Restaurant.LoadByPropName("UserId", userId.ToString());
-            if (restaurants.Count > 0)
-                name = restaurants[0].Name + " ";
+            Restaurant restaurant = Restaurant.LoadById(restaurantId);
+            string name = restaurant.Name + " ";
 
             // Stream it down to the browser
             Response.AppendHeader("Content-Disposition", "attachment;filename=" + name + "Business Plan.docx");

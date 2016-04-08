@@ -17,7 +17,7 @@ public class WordDoc
     {
     }
 
-    static int currentUserId = 1;
+    static int currentRestaurantId = 1;
     static double[] TotalSalesPerDay = new double[7];
     static int[] CoversPerDay = new int[7];
     static double WeeklyFood = 0;
@@ -30,9 +30,9 @@ public class WordDoc
     static double[] FiveYearCashFlow = new double[5];
     static double Principal = 0;
 
-    public static void Print(WordprocessingDocument wordDocument, string header, int userId)
+    public static void Print(WordprocessingDocument wordDocument, string header, int restaurantId)
     {
-        currentUserId = userId;
+        currentRestaurantId = restaurantId;
 
         AddTitlePage(wordDocument);
 
@@ -60,24 +60,20 @@ public class WordDoc
     {
         Body body = wordDocument.MainDocumentPart.Document.Body;
 
-        Users user = Users.LoadById(currentUserId);
-        if (user == null)
-            return;
-
-        List<Restaurant> restaurant = Restaurant.LoadByPropName("UserId", user.Id.ToString());
-        if (restaurant.Count == 0)
-            return;
+        Restaurant restaurant = Restaurant.LoadById(currentRestaurantId);
+        Users user = Users.LoadById(restaurant.UserId);
 
         body.AddParagraph("\n\n\n\n\n\n");
 
         Table tbl = NewTable(body, 1);
 
         tbl.AddRow(new string[] { "" }, new string[] { "Background:17365D" });
-        tbl.AddRow(new string[] { restaurant[0].Name }, new string[] { "Background:2B579A|JustifyCenter|FontSize:72|FontColor:FFFFFF" });
+        tbl.AddRow(new string[] { restaurant.Name }, new string[] { "Background:2B579A|JustifyCenter|FontSize:72|FontColor:FFFFFF" });
         tbl.AddRow(new string[] { "" }, new string[] { "Background:17365D" });
 
         body.AddLineBreak();
         body.AddLineBreak();
+
         body.AddCenterParagraph("Authored and presented by:\n" + user.Name);
 
         body.AddPageBreak();
@@ -88,7 +84,7 @@ public class WordDoc
         Body body = wordDocument.MainDocumentPart.Document.Body;
         body.AddHeader("Restaurant Concept");
 
-        List<Question> questions = Question.Get("Concept", null, currentUserId, false);
+        List<Question> questions = Question.Get("Concept", null, currentRestaurantId, false);
 
         foreach(Question question in questions)
         {
@@ -103,7 +99,7 @@ public class WordDoc
     static void PrintBusinessPlan(WordprocessingDocument wordDocument)
     {
         Body body = wordDocument.MainDocumentPart.Document.Body;
-        List<Question> questions = Question.Get("Business Plan", null, currentUserId, false);
+        List<Question> questions = Question.Get("Business Plan", null, currentRestaurantId, false);
 
         for (int i = 0; i < questions.Count; i++)
         {
@@ -169,7 +165,7 @@ public class WordDoc
         string[] detailStyle = new string[] { "LeftIndent:400", "JustifyRight|RightIndent:1000" };
         string[] totalStyle = new string[] { "Bold|Background:ABCDEF", "Background:ABCDEF", "Background:ABCDEF|JustifyRight|RightIndent:1000|Bold" };
 
-        List<Question> questions = Question.Get("Financials", "Capital Budget", currentUserId, false);
+        List<Question> questions = Question.Get("Financials", "Capital Budget", currentRestaurantId, false);
         double totalSum = 0;
         double sectionSum = 0;
         List<string[]> usesRows = new List<string[]>();
@@ -194,7 +190,7 @@ public class WordDoc
             }
         }
 
-        List<Question> basicInfo = Question.Get("Financials", "Basic Info", currentUserId, false);
+        List<Question> basicInfo = Question.Get("Financials", "Basic Info", currentRestaurantId, false);
         double equityCapital = basicInfo.ByTitleSum(new string[] { "Equity Capital" });
         
         tbl.AddRow(new string[] { "SOURCES OF CASH", "", "" }, new string[] { "Bold" });
@@ -229,7 +225,7 @@ public class WordDoc
         bool odd = true;
         int sum = 0;
 
-        List<Question> questions = Question.Get("Financials", "Capital Budget", currentUserId, false);
+        List<Question> questions = Question.Get("Financials", "Capital Budget", currentRestaurantId, false);
         for (int i = 0, ii = questions.Count; i < ii; i++)
         {
             if(i == 0)
@@ -295,7 +291,7 @@ public class WordDoc
         double beerSum = 0;
         double wineSum = 0;
 
-        List<Question> questions = Question.Get("Financials", "Sales Projection", currentUserId, false);
+        List<Question> questions = Question.Get("Financials", "Sales Projection", currentRestaurantId, false);
         string page = "1";
         if (meal == "Lunch")
             page = "2";
@@ -352,10 +348,10 @@ public class WordDoc
         double foodSum = 0;
         double bevSum = 0;
 
-        List<Question> questions = Question.Get("Financials", "Sales Projection", currentUserId, false);
+        List<Question> questions = Question.Get("Financials", "Sales Projection", currentRestaurantId, false);
         tbl.AddRow(new string[] { "", "", "Table|Turns", "Covers", "Food", "Liquor", "Beer", "Wine", "Total" }, header);
 
-        double numberSeats = Question.Get("Financials", "Basic Info", currentUserId, false).ByTitleSum(new string[] { "Number of Dining Seats" });
+        double numberSeats = Question.Get("Financials", "Basic Info", currentRestaurantId, false).ByTitleSum(new string[] { "Number of Dining Seats" });
         int totalCovers = 0;
 
         WeeklyFood = 0;
@@ -427,7 +423,7 @@ public class WordDoc
         string[] borderStyle = new string[] { "VerticalText:650|Bold|JustifyCenter|VerticalMerge:Continue", "VerticalText:650|Bold|JustifyCenter|VerticalMerge:Continue", "VerticalText:650|JustifyCenter|Borders:Left:Bottom", "VerticalText:650|Background:ABCDEF|JustifyCenter|Borders:Bottom", "VerticalText:650|JustifyCenter|Borders:Bottom", "VerticalText:650|Background:ABCDEF|JustifyCenter|Borders:Bottom", "VerticalText:650|Bold|JustifyCenter|Borders:Bottom", "VerticalText:650|Background:ABCDEF|JustifyCenter|Borders:Bottom", "VerticalText:650|JustifyCenter|Borders:Bottom", "VerticalText:650|Background:ABCDEF|JustifyCenter|Borders:Bottom", "VerticalText:650|JustifyCenter|Borders:Bottom", "VerticalText:650|Background:ABCDEF|JustifyCenter|Borders:Bottom:Right", "VerticalText:650|JustifyCenter|Bold", "VerticalMerge:Continue", "VerticalMerge:Continue", "VerticalMerge:Continue", "VerticalMerge:Continue" };
         string[] lastStyle = new string[] { "VerticalText:900|Bold|JustifyCenter", "VerticalText:900|Bold|JustifyCenter", "VerticalText:900|JustifyCenter|Borders:Left:Bottom", "VerticalText:900|Background:ABCDEF|JustifyCenter|Borders:Bottom", "VerticalText:900|JustifyCenter|Borders:Bottom", "VerticalText:900|Background:ABCDEF|JustifyCenter|Borders:Bottom", "VerticalText:900|Bold|JustifyCenter|Borders:Bottom", "VerticalText:900|Background:ABCDEF|JustifyCenter|Borders:Bottom", "VerticalText:900|JustifyCenter|Borders:Bottom", "VerticalText:900|Background:ABCDEF|JustifyCenter|Borders:Bottom", "VerticalText:900|JustifyCenter|Borders:Bottom", "VerticalText:900|Background:ABCDEF|JustifyCenter|Borders:Bottom:Right", "VerticalText:900|JustifyCenter|Bold", "VerticalText:900|JustifyCenter|Bold", "VerticalText:900|JustifyCenter|Bold", "VerticalText:900|JustifyCenter|Bold", "VerticalMerge:Restart" };
 
-        List<Question> questions = Question.Get("Financials", "Hourly Labor", currentUserId, false);
+        List<Question> questions = Question.Get("Financials", "Hourly Labor", currentRestaurantId, false);
         string serverRate = questions.ByTitle("Server Rate", "0.00");
         string serverHours = questions.ByTitle("Server Average Number of Hours", "0");
         string serverShifts = questions.ByTitle("Average Servers per Day", "0");
@@ -497,7 +493,7 @@ public class WordDoc
 
         Table tbl = NewTable(body, 5);
 
-        List<Question> questions = Question.Get("Financials", "Expenses", currentUserId, false);
+        List<Question> questions = Question.Get("Financials", "Expenses", currentRestaurantId, false);
         
         string[] headerStyle = new string[] { "LeftIndent:200|Bold" };
         string[] detailStyle = new string[] { "LeftIndent:600", "JustifyRight|RightIndent:600", "JustifyRight|RightIndent:600", "JustifyRight|RightIndent:600", "JustifyRight|RightIndent:600" };
@@ -664,7 +660,7 @@ public class WordDoc
             }
         }
 
-        List<Question> capital = Question.Get("Financials", "Capital Budget", currentUserId, false);
+        List<Question> capital = Question.Get("Financials", "Capital Budget", currentRestaurantId, false);
         double building = capital.BySectionSum("Land and Building");
         building /= 30; //30 Year Depreciation
         double leasehold = capital.ByTitleSum(new string[] { "Construction Contract", "Architect & Engineering", "Legal (lease & incorporation)", "Project Consultant", "Accounting & Tax", "Name, Logo & Graphic Design", "Building Permits", "Other Licenses & Permits", "Landscaping", "Exterior Signs & Decorations", "Resurfacing", "Parking Bumpers", "Parking Lot Striping", "Contingency" });
@@ -725,7 +721,7 @@ public class WordDoc
 
         Table tbl = NewTable(body, 5);
 
-        List<Question> questions = Question.Get("Financials", "Expenses", currentUserId, false);
+        List<Question> questions = Question.Get("Financials", "Expenses", currentRestaurantId, false);
 
         string[] headerStyle = new string[] { "LeftIndent:200|Bold" };
         string[] detailStyle = new string[] { "LeftIndent:600", "JustifyRight|RightIndent:600", "JustifyRight|RightIndent:600", "JustifyRight|RightIndent:600", "JustifyRight|RightIndent:600" };
@@ -860,7 +856,7 @@ public class WordDoc
         tbl.AddRow(AddIncomeRow(expenses[expenses.Count - 1].Section, sectionSum * 12), detailStyle);
 
 
-        List<Question> capital = Question.Get("Financials", "Capital Budget", currentUserId, false);
+        List<Question> capital = Question.Get("Financials", "Capital Budget", currentRestaurantId, false);
         double building = capital.BySectionSum("Land & Building");
         building /= 30; //30 Year Depreciation
         double leasehold = capital.ByTitleSum(new string[] { "Construction Contract", "Architect & Engineering", "Legal (lease & incorporation)", "Project Consultant", "Accounting & Tax", "Name, Logo & Graphic Design", "Building Permits", "Other Licenses & Permits", "Landscaping", "Exterior Signs & Decorations", "Resurfacing", "Parking Bumpers", "Parking Lot Striping", "Contingency" });
@@ -916,7 +912,7 @@ public class WordDoc
 
         Table tbl = NewTable(body, 11);
 
-        List<Question> questions = Question.Get("Financials", "Expenses", currentUserId, false);
+        List<Question> questions = Question.Get("Financials", "Expenses", currentRestaurantId, false);
 
         string[] headerStyle = new string[] { "Bold|FontSize:20|HorizontalMerge:Restart", "HorizontalMerge:Continue", "HorizontalMerge:Continue", "HorizontalMerge:Continue", "HorizontalMerge:Continue", "HorizontalMerge:Restart" };
         string[] detailStyle = new string[] { "LeftIndent:200|FontSize:20", "JustifyRight|RightIndent:10|FontSize:20", "JustifyRight|RightIndent:200|FontSize:20", "JustifyRight|RightIndent:10|FontSize:20", "JustifyRight|RightIndent:200|FontSize:20", "JustifyRight|RightIndent:10|FontSize:20", "JustifyRight|RightIndent:200|FontSize:20", "JustifyRight|RightIndent:10|FontSize:20", "JustifyRight|RightIndent:200|FontSize:20", "JustifyRight|RightIndent:10|FontSize:20", "JustifyRight|RightIndent:200|FontSize:20" };
@@ -931,7 +927,7 @@ public class WordDoc
         double weeklyBeverage = WeeklyLiquor + WeeklyBeer + WeeklyWine;
         YearlyTotalSales = weeklyTotal * 52;
 
-        List<Question> investmentQuestions = Question.Get("Financials", "Investment", currentUserId, false);
+        List<Question> investmentQuestions = Question.Get("Financials", "Investment", currentRestaurantId, false);
         double salesPct = investmentQuestions.ByTitleSum(new string[] { "Sales % Increase" });
         double costPct = salesPct;
         double salaryPct = investmentQuestions.ByTitleSum(new string[] { "Salary % Increase" });
@@ -1064,7 +1060,7 @@ public class WordDoc
         string[] occupancyRow = Add5YearRow("Occupancy", sectionSum * 12, occupancyPct);
         tbl.AddRow(occupancyRow, detailStyle);
 
-        List<Question> capital = Question.Get("Financials", "Capital Budget", currentUserId, false);
+        List<Question> capital = Question.Get("Financials", "Capital Budget", currentRestaurantId, false);
         double building = capital.BySectionSum("Land & Building");
         building /= 30; //30 Year Depreciation
         double leasehold = capital.ByTitleSum(new string[] { "Construction Contract", "Architect & Engineering", "Legal (lease & incorporation)", "Project Consultant", "Accounting & Tax", "Name, Logo & Graphic Design", "Building Permits", "Other Licenses & Permits", "Landscaping", "Exterior Signs & Decorations", "Resurfacing", "Parking Bumpers", "Parking Lot Striping", "Contingency" });
@@ -1178,7 +1174,7 @@ public class WordDoc
 
         Table tbl = NewTable(body, 6);
 
-        List<Question> investmentQuestions = Question.Get("Financials", "Investment", currentUserId, false);
+        List<Question> investmentQuestions = Question.Get("Financials", "Investment", currentRestaurantId, false);
         double distributeYear1 = investmentQuestions.ByTitleSum(new string[] { "Year 1 Percentage" });
         double distributeYear2 = investmentQuestions.ByTitleSum(new string[] { "Year 2 Percentage" });
         double distributeYear3 = investmentQuestions.ByTitleSum(new string[] { "Year 3 Percentage" });
@@ -1188,8 +1184,8 @@ public class WordDoc
         double equityContribution = investmentQuestions.ByTitleSum(new string[] { "Operating Partner Equity Contribution" });
         double cashBeforePayback = investmentQuestions.ByTitleSum(new string[] { "Cash Distribution % Before Investor Payback" });
         double cashAfterPayback = investmentQuestions.ByTitleSum(new string[] { "Cash Distribution % After Investor Payback" });
-        
-        List<Question> basicInfo = Question.Get("Financials", "Basic Info", currentUserId, false);
+
+        List<Question> basicInfo = Question.Get("Financials", "Basic Info", currentRestaurantId, false);
         double initialInvestment = basicInfo.ByTitleSum(new string[] { "Equity Capital" });
         double totalInvestment = initialInvestment;
 
@@ -1266,10 +1262,10 @@ public class WordDoc
 
         Table tbl = NewTable(body, 4);
 
-        List<Question> investmentQuestions = Question.Get("Financials", "Investment", currentUserId, false);
+        List<Question> investmentQuestions = Question.Get("Financials", "Investment", currentRestaurantId, false);
         double minLabor = investmentQuestions.ByTitleSum(new string[] { "Minimum Hourly Labor Percentage" });
 
-        List<Question> questions = Question.Get("Financials", "Expenses", currentUserId, false);
+        List<Question> questions = Question.Get("Financials", "Expenses", currentRestaurantId, false);
 
         string[] headerStyle = new string[] { "LeftIndent:200|Bold|Background:ABCDEF", "Bold|Background:ABCDEF|JustifyRight|RightIndent:800", "Bold|Background:ABCDEF|JustifyRight|RightIndent:600", "Bold|Background:ABCDEF|JustifyRight|RightIndent:600" };
         string[] detailStyle = new string[] { "LeftIndent:200", "JustifyRight|RightIndent:600", "JustifyRight|RightIndent:600", "JustifyRight|RightIndent:600" };

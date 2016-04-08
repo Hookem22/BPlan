@@ -28,7 +28,9 @@ public partial class App_Default : System.Web.UI.Page
         {
             CurrentUserId.Value = user.Id.ToString();
         }
-           
+        //ProspectId.Value = "1017";
+        CurrentUserId.Value = "3060";
+
         //UserName.Value = user.Name;
         //TimeSpan span = DateTime.Now - user.Joined;
         //if (span.Days <= 0)
@@ -46,9 +48,14 @@ public partial class App_Default : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static List<Question> Get(string header, string category, int userId)
+    public static Prospect GetProspect(string prospectId)
     {
-        return Question.Get(header, category, userId);
+        int id;
+        if (int.TryParse(prospectId, out id))
+        {
+            return Prospect.LoadById(id);
+        }
+        return new Prospect();
     }
 
     [WebMethod]
@@ -65,10 +72,10 @@ public partial class App_Default : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static List<Question> GetQuestions(string userId)
+    public static List<Question> GetQuestions(string restaurantId)
     {
         int id;
-        if (int.TryParse(userId, out id))
+        if (int.TryParse(restaurantId, out id))
         {
             return Question.GetFinancials(id);
         }
@@ -112,6 +119,7 @@ public partial class App_Default : System.Web.UI.Page
         email.Send();
 
         HttpContext.Current.Session["CurrentUser"] = user;
+        HttpContext.Current.Session["CurrentProspect"] = null;
 
         return user;
     }
@@ -132,6 +140,37 @@ public partial class App_Default : System.Web.UI.Page
             restaurant.Save();
         }
     }
+
+    [WebMethod]
+    public static Restaurant CreateRestaurant(int userId, string name, string food, string restaurantType, int size, string city, string opening, string meals, string drinks)
+    {
+        Restaurant restaurant = new Restaurant();
+        restaurant.UserId = userId;
+        restaurant.Name = name;
+        restaurant.Food = food;
+        restaurant.RestaurantType = restaurantType;
+        restaurant.Size = size;
+        restaurant.SquareFootage = size * 15;
+        restaurant.City = city;
+        restaurant.Opening = opening;
+        restaurant.Save();
+
+        Answer.CreateAnswersFromTemplate(restaurant, meals, drinks);
+
+        Users user = Users.LoadById(restaurant.UserId);
+
+        if (ConfigurationManager.AppSettings["IsProduction"] == "true")
+        {
+            string body = string.Format("UserId: {0}<br>Name: {1}<br>Email: {2}<br><br>{3}", user.Id, user.Name, user.Email, restaurant.Name);
+            Email email = new Email("RestaurantBPlan@RestaurantBPlan.com", "williamallenparks@gmail.com", "New Sign Up", body);
+            email.Send();
+        }
+        HttpContext.Current.Session["CurrentUser"] = user;
+        HttpContext.Current.Session["CurrentProspect"] = null;
+
+        return restaurant;
+    }
+
 
     [WebMethod]
     public static void SaveRestaurant(Restaurant restaurant)

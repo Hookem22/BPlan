@@ -23,27 +23,50 @@
         var currentQuestion = 0;
         var currentUserId = 0;
         var currentUser;
+        var currentProspect;
 
         $(document).ready(function () {
+            currentUserId = +$("#CurrentUserId").val();
             var prospectId = +$("#ProspectId").val();
             if (prospectId) {
-                $(".modal-backdrop").show();
-                $(".signup").show();
+                   
+                var prospectSuccess = function (prospect) {
+                    currentProspect = prospect;
+                    $("#createName").val(prospect.Restaurant);
+                    $("#createFood").val(prospect.Food);
+                    $("#createCity").val(prospect.City);
+                    $("#createOpening").val(prospect.Opening);
+                    $(".createRestaurant .shadowBox").each(function () {
+                        if ($(this).html() == prospect.RestaurantType)
+                            $(this).addClass("active");
+                    });
+
+                    $(".modal-backdrop").show();
+                    $(".createRestaurant").show();
+                };
+                Post("GetProspect", { prospectId: prospectId }, prospectSuccess);
+
             }
             else {
-                currentUserId = +$("#CurrentUserId").val();
-
-                var success = function (user) {
+               var success = function (user) {
                     currentUser = user;
-                    $(".myAccount a").html(user.Name);
-                    $(".restaurantName").html(user.Restaurant.Name);
+                    if (!user.Restaurant) {
+                        $(".modal-backdrop").show();
+                        $(".createRestaurant").show();
+                    }
+                    else {
+                        $(".myAccount a").html(user.Name);
+                        $(".restaurantName").html(user.Restaurant.Name);
+
+                        var questionsSuccess = function (results) {
+                            Questions = results;
+                        };
+                        Post("GetQuestions", { restaurantId: user.Restaurant.Id }, questionsSuccess);
+                    }
                 };
                 Post("GetUser", { userId: currentUserId }, success);
 
-                var questionsSuccess = function(results) {
-                    Questions = results;
-                };
-                Post("GetQuestions", { userId: currentUserId }, questionsSuccess);
+
             }
 
             $(".signupBtn").click(function() {
@@ -81,6 +104,39 @@
                 };
 
                 Post("CreateUser", { user: user, prospectId: prospectId }, success);
+            });
+
+            $(".createRestaurantBtn").click(function () {
+                $(".createRestaurantBtn").animate({ "opacity": 0.01 }, 500, function () {
+                    //$(".createRestaurantBtn").hide();
+                    $(".creatingPlan").fadeIn();
+                    $(".createRestaurant").animate({ "height": "205px", "top": "120px" }, 1500, function () { });
+                });
+
+                var meals = "";
+                $(".createRestaurant .meals .blueCheckBox.checked").each(function () {
+                    if (meals) {
+                        meals += "|"
+                    }
+                    meals += $(this).attr("val");
+                });
+                var drinks = "";
+                $(".createRestaurant .drinks .blueCheckBox.checked").each(function () {
+                    if (drinks) {
+                        drinks += "|"
+                    }
+                    drinks += $(this).attr("val");
+                });
+                var size = currentProspect == "Intimate" ? 50 : currentProspect == "Average" ? 100 : 150;
+                var params = {
+                    userId: currentUserId, name: $("#createName").val(), food: $("#createFood").val(), restaurantType: $(".createRestaurant .shadowBox.active").html(),
+                    size: size, city: $("#createCity").val(), opening: $("#createOpening").val(), meals: meals, drinks: drinks
+                };
+
+                var restaurantCreated = function () {
+
+                };
+                Post("CreateRestaurant", params, restaurantCreated);
             });
 
             $(".nav.primary div").not(".restaurantName").click(function () {
@@ -137,6 +193,15 @@
                 $(this).addClass("clicked");
                 NextClicked();
                 $(this).removeClass("clicked");
+            });
+
+            $("body").on("click", ".blueCheckBox", function () {
+                $(this).toggleClass("checked");
+            });
+
+            $(".createRestaurant .shadowBox").click(function () {
+                $(".createRestaurant .shadowBox").removeClass("active");
+                $(this).addClass("active");
             });
 
             $(".main").on("click", ".scrollArrow", function () {
@@ -203,7 +268,7 @@
                 }
                 if (header)
                 {
-                    window.open("/Word?header=" + header + "&u=" + currentUserId);
+                    window.open("/Word?header=" + header + "&r=" + currentUser.Restaurant.Id);
                 }
                 else
                 {
@@ -266,7 +331,7 @@
                     else
                         PrevScreen(html, populate);
                 }
-                else if (header == "Edit Financials") {
+                else if (header == "Edit B Plan") {
                     currentQuestion = 0;
                     if (currentScreen == "Get Started" || currentScreen == "My Restaurant")
                         NextScreen();
@@ -328,7 +393,7 @@
                 $(".nav.secondary .subheaderList").hide();
                 $(".backBtn").hide();
             }
-            else if (header == "Edit Financials")
+            else if (header == "Edit B Plan")
             {
                 subheaders = ["Basic Info", "Capital Budget", "Sales Projection", "Hourly Labor", "Expenses", "Investment"];
                 $(".scrollArrow").hide();
@@ -834,6 +899,57 @@
             <input id="signupConfirm" placeholder="Confirm Password" type="password" style="margin-bottom: 20px;" />
             <div class="signupBtn">Sign up</div>
         </div>
+        <div class="createRestaurant">
+            <div class="createRestaurantHeader">
+                Welcome to Restaurant B Plan. Let's do this!
+            </div>
+            <div style="float:left;">
+                <div style="font-size: 20px;margin: 26px 0 8px 50px;color: #676767;">Restaurant Name</div>
+                <input id="createName" type="text" />
+            </div>
+            <div style="float:left;">
+                <div style="font-size: 20px;margin: 26px 0 8px 50px;color: #676767;">What kind of food?</div>
+                <input id="createFood" type="text" />
+            </div>
+            <div style="float:left;font-size: 20px;margin:26px 310px 10px;color: #676767;">Type of Restaurant</div>
+            <div>
+                <div class="shadowBox" style="margin-left:45px;">Fine Dining</div>
+                <div class="shadowBox">Casual</div>
+                <div class="shadowBox">Fast Casual</div>
+                <div class="shadowBox">Trailer</div>
+            </div>
+<%--            <div style="float:left;font-size: 20px;margin:26px 310px 10px;color: #676767;">Size</div>
+            <div style="float:left;font-size: 20px;margin:26px 0px 10px;">
+                <div class="shadowBox active" style="margin-left:45px;">Intimate (less than 50 seats)</div>
+                <div class="shadowBox">Average (50 - 150 seats)</div>
+                <div class="shadowBox">Large (over 150 seats)</div>
+            </div>--%>
+            <div class="meals" style="float:left;width:385px;">
+                <div style="font-size: 20px;margin: 30px 0 8px 50px;color: #676767;">What meals will you serve?</div>
+                <div class="blueCheckBox" style="float: left;margin: 0 4px 0 51px;" val="Breakfast"></div><div style="float: left;">Breakfast</div>
+                <div class="blueCheckBox checked" style="float: left;margin: 0 4px 0 24px;" val="Lunch"></div><div style="float: left;">Lunch</div>
+                <div class="blueCheckBox checked" style="float: left;margin: 0 4px 0 24px;" val="Dinner"></div><div style="float: left;">Dinner</div>
+            </div>
+            <div class="drinks" style="float:left;">
+                <div style="font-size: 20px;margin: 30px 0 8px 50px;color: #676767;">What about drinks?</div>
+                <div class="blueCheckBox checked" style="float: left;margin: 0 4px 0 51px;" val="Liquor"></div><div style="float: left;">Liquor</div>
+                <div class="blueCheckBox checked" style="float: left;margin: 0 4px 0 24px;" val="Beer"></div><div style="float: left;">Beer</div>
+                <div class="blueCheckBox checked" style="float: left;margin: 0 4px 0 24px;" val="Wine"></div><div style="float: left;">Wine</div>
+
+            </div>
+            <div style="float:left;clear:left;">
+                <div style="font-size: 20px;margin: 30px 0 8px 50px;color: #676767;">City</div>
+                <input id="createCity" type="text" />
+            </div>
+            <div style="float:left;">
+                <div style="font-size: 20px;margin: 30px 0 8px 50px;color: #676767;">Projected Opening Date</div>
+                <input id="createOpening" type="text" />
+            </div>
+
+            <div class="createRestaurantBtn">Create Business Plan</div>
+            <div class="creatingPlan" ><img src="../img/gear.gif" style="height: 120px;margin-right: -30px;" />
+                <span>Generating Your Business Plan</span></div>
+        </div>
         <div class="helpDialog modal-dialog">
             <div class="dialogClose">X</div>
             <h3></h3>
@@ -890,9 +1006,9 @@
         <div class="subheader">
             <div class="nav primary">
                 <div class="active" style="margin-left:40px;">Get Started</div>
-                <div>My Restaurant</div>
-                <div>Edit Financials</div>
-                <div>Plan Explained</div>
+                <div>B Plan Explained</div>
+                <div>Edit B Plan</div>
+                <div>Extras</div>
                 <div>Print</div>
                 <div class="restaurantName"></div>
             </div>

@@ -35,6 +35,9 @@ function Post(url, data, success) {
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
+        error: function(err) {
+            console.log(err);
+        },
         success: function (val) {
             if (success)
                 success(val.d);

@@ -32,6 +32,14 @@ public class Question : BaseClass<Question>
 
     public string SkipCondition { get; set; }
 
+    public string DefaultValue0 { get; set; }
+
+    public string DefaultValue1 { get; set; }
+
+    public string DefaultValue2 { get; set; }
+
+    public string DefaultValue3 { get; set; }
+
     [NonDB]
     public Answer Answer { get; set; }
 
@@ -50,7 +58,7 @@ public class Question : BaseClass<Question>
     //    return questions;
     //}
 
-    public static List<Question> Get(string header, string category, int userId = 0, bool getOverview = true)
+    public static List<Question> Get(string header, string category, int restaurantId = 0, bool getOverview = true)
     {
         List<Question> all = new List<Question>();
 
@@ -60,7 +68,7 @@ public class Question : BaseClass<Question>
             List<Sheet> sheets = Sheet.LoadByPropName("Name", category);
             if (sheets.Count > 0)
             {
-                Question overview = new Question() { Id = -1, SheetId = sheets[0].Id, Page = "", Section = "Overview", Title = sheets[0].Overview ?? "", Help = sheets[0].Summary ?? "", QuestionSheet = sheets[0], SkipCondition = "", Answer = new Answer() { Id = 0, QuestionId = -1, Text = "", UserId = userId } };
+                Question overview = new Question() { Id = -1, SheetId = sheets[0].Id, Page = "", Section = "Overview", Title = sheets[0].Overview ?? "", Help = sheets[0].Summary ?? "", QuestionSheet = sheets[0], SkipCondition = "", Answer = new Answer() { Id = 0, QuestionId = -1, Text = "", RestaurantId = restaurantId } };
                 all.Add(overview);
             }
         }
@@ -75,7 +83,7 @@ public class Question : BaseClass<Question>
 
             SqlCommand cmdGet = new SqlCommand("Question_Get", conn);
             cmdGet.CommandType = CommandType.StoredProcedure;
-            cmdGet.Parameters.Add(new SqlParameter("@UserId", userId));
+            cmdGet.Parameters.Add(new SqlParameter("@RestaurantId", restaurantId));
             cmdGet.Parameters.Add(new SqlParameter("@Header", header));
             cmdGet.Parameters.Add(new SqlParameter("@Sheet", category));
 
@@ -110,7 +118,7 @@ public class Question : BaseClass<Question>
                 question.SkipCondition = rdr.IsDBNull(SKIPCONDITION) ? "" : rdr.GetString(SKIPCONDITION);
                 question.Answer = new Answer();
                 question.Answer.Id = rdr.IsDBNull(ANSWERID) ? 0 : rdr.GetInt32(ANSWERID);
-                question.Answer.UserId = userId;
+                question.Answer.RestaurantId = restaurantId;
                 question.Answer.QuestionId = question.Id;
                 question.Answer.Text = rdr.IsDBNull(TEXT) ? "" : rdr.GetString(TEXT);
             }
@@ -131,13 +139,13 @@ public class Question : BaseClass<Question>
 
     }
 
-    public static List<Question> GetFinancials(int userId)
+    public static List<Question> GetFinancials(int restaurantId)
     {
         List<Sheet> sheets = Sheet.LoadByPropName("Header", "Financials").OrderBy(x => x.Id).ToList();
         List<Question> questions = new List<Question>();
         foreach (Sheet sheet in sheets)
         {
-            questions.AddRange(Get(sheet.Header, sheet.Name, userId));
+            questions.AddRange(Get(sheet.Header, sheet.Name, restaurantId));
         }
         return questions;
     }
