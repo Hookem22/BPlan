@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
     <link rel="icon" type="image/png" href="/img/favicon.png">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600' rel='stylesheet' type='text/css'>
-    <link href="/Styles/Plan.css?i=2" rel="stylesheet" type="text/css" />
+    <link href="/Styles/Plan.css?i=3" rel="stylesheet" type="text/css" />
 
     <script src="/Scripts/jquery-2.0.3.min.js" type="text/javascript"></script>
     <script src="/Scripts/Helpers.js" type="text/javascript"></script>
@@ -28,7 +28,7 @@
             SendEmail("Sign Up Selected" + purchasePrice, packageType + purchasePrice);
 
             $(".modal-backdrop").show();
-            $(".payment.signup").show().css({ left: "50%" });
+            $(".signup").show().css({ left: "50%" });
             $(".answer input").first().focus();
             signupClick = true;
         }
@@ -44,7 +44,7 @@
 
 
             $(".modal-backdrop").show();
-            $(".payment.signup").show().css({ left: "50%" });
+            $(".signup").show().css({ left: "50%" });
             $(".answer input").first().focus();
             signupClick = false;
         }
@@ -86,36 +86,42 @@
                 $("body").css("overflow-x", "");
             });
 
-            $(".payment.signup .pitchButton").click(function () {
+            $(".signup .signupBtn").click(function () {
 
                 var error = false;
-                $("#SignupName, #SignupEmail, #SignupPassword").removeClass("error")
-                if (!$("#SignupName").val()) {
-                    $("#SignupName").addClass("error");
+                $(".signup input").removeClass("error")
+                if (!$("#signupName").val()) {
+                    $("#signupName").addClass("error");
                     error = true;
-                } if (!$("#SignupEmail").val()) {
-                    $("#SignupEmail").addClass("error");
+                } if (!$("#signupEmail").val()) {
+                    $("#signupEmail").addClass("error");
                     error = true;
                 }
-                if (!$("#SignupPassword").val()) {
-                    $("#SignupPassword").addClass("error");
+                if (!$("#signupPassword").val()) {
+                    $("#signupPassword").addClass("error");
+                    error = true;
+                }
+                if ($("#signupPassword").val() != $("#signupConfirm").val()) {
+                    $("#signupPassword").addClass("error");
+                    $("#signupConfirm").addClass("error");
                     error = true;
                 }
                 if (error)
                     return;
 
-                var body = $("#SignupName").val() + "<br/><br/>";
-                body += $("#SignupEmail").val() + "<br/><br/>";
-                body += $("#SignupPassword").val();
+                var user = { Name: $("#signupName").val(), Email: $("#signupEmail").val(), Password: $("#signupPassword").val() };
+
+                var body = user.Name + "<br/><br/>";
+                body += user.Email + "<br/><br/>";
 
                 SendEmail("Sign Up", body);
 
-                if (signupClick) {
-                    $(".payment .answer").html("<img src='https://govizzle.com/images/loading-animation.gif' style='height: 60px;margin: 72px 174px;' />");
+                //if (signupClick) {
+                    $(".signup").html("<img src='https://govizzle.com/images/loading-animation.gif' style='height: 60px;margin: 72px 293px;' />");
                     setTimeout(function () {
-                        $(".payment .answer").html("<div style='color: #333;font-size: 24px;margin: 20px 0;'>We're sorry, There was an error signing you up. <br/><br/> Please try again later.</div>");
+                        $(".signup").html("<div style='color: #333;font-size: 24px;margin:40px 120px;'>We're sorry, There was an error signing you up. <br/><br/> Please try again later.</div>");
                     }, 2500);
-                }
+                /*}
                 else {
                     $("body").css("overflow-x", "hidden");
                     $(".payment.signup .answer").animate({ left: "-50%" }, 500, function () {
@@ -130,7 +136,7 @@
                         $(".answer input").first().focus();
                         $("body").css("overflow-x", "");
                     });
-                }
+                }*/
             });
 
             $(".payment.creditcard .pitchButton").click(function () {
@@ -385,7 +391,7 @@
                 <div class="priceItem">Step by step app for building a professional business plan</div>
                 <div class="priceItem">Explanations from restaurateurs for each field to help develop of your final plan</div>
                 <div class="priceItem strike">10 seperate financial documents ready to take to investors</div>
-                <div class="priceItem strike">Web document for quick access between partners and investors</div>
+<%--                <div class="priceItem strike">Web document for quick access between partners and investors</div>--%>
                 <div class="playButton" onclick="SignupClick('Financial Plan Only');">START FOR FREE</div>
             </div>
             <div class="priceColumn">
@@ -395,7 +401,7 @@
                 <div class="priceItem">Step by step app for building a professional business plan</div>
                 <div class="priceItem">Explanations from restaurateurs for each field to help develop of your final plan</div>
                 <div class="priceItem">10 seperate financial documents ready to take to investors</div>
-                <div class="priceItem">Web document for quick access between partners and investors</div>
+<%--                <div class="priceItem">Web document for quick access between partners and investors</div>--%>
                 <div class="playButton" onclick="BuyClick('Financial Plan Only');">BUY NOW</div>
             </div>
             <div class="priceColumn">
@@ -403,7 +409,7 @@
                 <div class="actualPrice" style="font-size: 28px;margin: 21px 0 33px;">Contact Us</div>
                 <div class="priceTitle">Custom Plan</div>
                 <div class="priceItem">Work directly with professional writers to create a custom plan around your restaurant concept</div>
-                <div class="playButton" onclick="ContactClick();" style="margin-top: 252px;">CONTACT US</div>
+                <div class="playButton" onclick="ContactClick();" style="margin-top: 170px;">CONTACT US</div>
             </div>
         </div>
 
@@ -425,21 +431,27 @@
             <img src="/img/guarantee.png" style="height: 106px;margin: 101px 0 0 170px;" />
         </div>
     </div>
-    <div class="payment signup">
-        <div class="question">
-            <span>Making your restaurant dream<br /> a reality is less than a minute away.</span>
+<%--    <div class="signup">
+        <div class="dialogClose" onclick="$('.signup').hide();$('.modal-backdrop').hide();">X</div>
+        <div class="packageType" style="font-size: 28px;margin: 0 0 16px;line-height: 1.2em;" >Making your restaurant dream a reality is less than a minute away.</div>
+        <div style="margin: 12px 0 4px 88px;font-size: 20px;">Name</div>
+        <input id="SignupName" type="text" placeholder="Your Full Name" />
+        <div style="margin: 12px 0 4px 88px;font-size: 20px;">Email</div>
+        <input id="SignupEmail" type="text" placeholder="Your Email"  />
+        <div style="margin: 12px 0 4px 88px;font-size: 20px;">Password</div>
+        <input id="SignupPassword" type="password" placeholder="Minimum 7 Characters" />
+        <div class="pitchButton">Sign Up</div>
+    </div>--%>
+    <div class="signup">
+        <div class="dialogClose" onclick="$('.signup').hide();$('.modal-backdrop').hide();">X</div>
+        <div class="signupHeader">
+            Making your restaurant dream a<br />reality is less than a minute away.
         </div>
-        <div class="answer">
-            <div class="dialogClose" onclick="$('.payment').hide();$('.modal-backdrop').hide();">X</div>
-            <div class="packageType" style="font-size: 28px;margin: 0 0 16px;line-height: 1.2em;" >Making your restaurant dream a reality is less than a minute away.</div>
-            <div style="margin: 12px 0 4px 88px;font-size: 20px;">Name</div>
-            <input id="SignupName" type="text" placeholder="Your Full Name" />
-            <div style="margin: 12px 0 4px 88px;font-size: 20px;">Email</div>
-            <input id="SignupEmail" type="text" placeholder="Your Email"  />
-            <div style="margin: 12px 0 4px 88px;font-size: 20px;">Password</div>
-            <input id="SignupPassword" type="password" placeholder="Minimum 7 Characters" />
-            <div class="pitchButton">Sign Up</div>
-        </div>
+        <input id="signupName" placeholder="Full Name" type="text" style="margin-top: 20px;" />
+        <input id="signupEmail" placeholder="Email Address" type="text" />
+        <input id="signupPassword" placeholder="Password" type="password" />
+        <input id="signupConfirm" placeholder="Confirm Password" type="password" style="margin-bottom: 20px;" />
+        <div class="signupBtn">Sign up</div>
     </div>
 
     <div class="payment contact">

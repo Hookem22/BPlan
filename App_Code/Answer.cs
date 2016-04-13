@@ -49,6 +49,48 @@ public class Answer : BaseClass<Answer>
                     break;
             }
 
+
+            if (!meals.Contains("Breakfast") && question.SkipCondition.Contains("Breakfast"))
+            {
+                val = "0";
+            }
+            if (!meals.Contains("Lunch") && question.SkipCondition.Contains("Lunch"))
+            {
+                val = "0";
+            }
+            if (!meals.Contains("Dinner") && question.SkipCondition.Contains("Dinner"))
+            {
+                val = "0";
+            }
+            if (!drinks.Contains("Liquor"))
+            {
+                if (question.Title == "Liquor License" || question.Title == "Liquor Average Price" || question.Title == "Liquor % Ordered" ||
+                    question.Title == "Liquor Cost %" || question.Title == "Liquor Liability Insurance")
+                {
+                    val = "0";
+                }
+                if (question.Title == "Liquor & Wine")
+                {
+                    val = drinks.Contains("Wine") ? "5000" : "0";
+                }
+            }
+            if (!drinks.Contains("Beer"))
+            {
+                if (question.Title == "Beer" || question.Title == "Beer Average Price" || question.Title == "Beer % Ordered" ||
+                    question.Title == "Beer Cost %")
+                {
+                    val = "0";
+                }
+            }
+            if (!drinks.Contains("Wine"))
+            {
+                if (question.Title == "Wine Average Price" || question.Title == "Wine % Ordered" ||
+                    question.Title == "Wine Cost %")
+                {
+                    val = "0";
+                }
+            }
+
             Answer answer = new Answer(question.Id, restaurant.Id, val);
             answer.Save();
         }

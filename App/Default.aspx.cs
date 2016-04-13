@@ -21,16 +21,15 @@ public partial class App_Default : System.Web.UI.Page
                 ProspectId.Value = prospect.Id.ToString();
             else if (ConfigurationManager.AppSettings["IsProduction"] == "true")
                 Response.Redirect("http://RestaurantBPlan.com");
-            else
-                CurrentUserId.Value = "2";
+            else {
+                ProspectId.Value = "6404";
+                CurrentUserId.Value = "2059";
+            }
         }
         else
         {
             CurrentUserId.Value = user.Id.ToString();
         }
-        //ProspectId.Value = "1017";
-        CurrentUserId.Value = "3060";
-
         //UserName.Value = user.Name;
         //TimeSpan span = DateTime.Now - user.Joined;
         //if (span.Days <= 0)
@@ -161,8 +160,8 @@ public partial class App_Default : System.Web.UI.Page
 
         if (ConfigurationManager.AppSettings["IsProduction"] == "true")
         {
-            string body = string.Format("UserId: {0}<br>Name: {1}<br>Email: {2}<br><br>{3}", user.Id, user.Name, user.Email, restaurant.Name);
-            Email email = new Email("RestaurantBPlan@RestaurantBPlan.com", "williamallenparks@gmail.com", "New Sign Up", body);
+            string body = string.Format("{0}<br>UserId: {1}<br>Name: {2}<br>Email: {3}", restaurant.Name, user.Id, user.Name, user.Email);
+            Email email = new Email("RestaurantBPlan@RestaurantBPlan.com", "williamallenparks@gmail.com", "New Restaurant", body);
             email.Send();
         }
         HttpContext.Current.Session["CurrentUser"] = user;

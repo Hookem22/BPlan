@@ -110,7 +110,16 @@
                 $(".createRestaurantBtn").animate({ "opacity": 0.01 }, 500, function () {
                     //$(".createRestaurantBtn").hide();
                     $(".creatingPlan").fadeIn();
-                    $(".createRestaurant").animate({ "height": "205px", "top": "120px" }, 1500, function () { });
+                    $(".createRestaurant").animate({ "height": "235px", "top": "120px" }, 1500, function () {
+                        var progressWidth = 4;
+                        var restaurantCreatedTimer = setInterval(function () {
+                            progressWidth += 3;
+                            $(".creatingPlan .progress-bar").css("width", progressWidth + "%");
+                            if (isRestaurantCreated && progressWidth > 96) {
+                                window.location.reload();
+                            }
+                        }, 200);
+                    });
                 });
 
                 var meals = "";
@@ -134,7 +143,7 @@
                 };
 
                 var restaurantCreated = function () {
-
+                    isRestaurantCreated = true;
                 };
                 Post("CreateRestaurant", params, restaurantCreated);
             });
@@ -276,12 +285,37 @@
                 }
             });
 
+            $(".carousel").on("click", "a", function () {
+                if ($(this).hasClass("active"))
+                    return;
+
+                var section = $(this).attr("data-original-title");
+                for (var i = 0; i < Questions.length; i++) {
+                    if (Questions[i].Section == section) {
+                        currentQuestion = i;
+                        break;
+                    }
+                }
+
+                var that = this;
+                $(".carousel a").each(function (i) {
+                    if (this == that) {
+                        PrevScreen();
+                        return false;
+                    }
+                    else if ($(this).hasClass("active")) {
+                        NextScreen();
+                        return false;
+                    }
+                });
+            });
+
         });
 
         function Get(currentScreen)
         {
-            if (currentScreen == "My Restaurant")
-                SaveRestaurant();
+            //if (currentScreen == "My Restaurant")
+            //    SaveRestaurant();
 
             var header = $(".nav.primary .active").html();
             var category = $(".nav.secondary .active").html() || "";
@@ -298,7 +332,8 @@
 
                     PrevScreen(html);
                 }
-                else if (header == "My Restaurant") {
+                else if (header == "B Plan Explained") {
+                    /*
                     var rst = currentUser.Restaurant;
                     var header = rst.Name;
                     var para = "<div class='multiTextGroup' style='margin: 0 20px 30px 50px'>";
@@ -324,22 +359,22 @@
 
                     var populate = function () {
                         $(".multiTextGroup select").val(rst.RestaurantType);
-                    };
+                    };*/
 
                     if (currentScreen == "Get Started")
-                        NextScreen(html, populate);
+                        NextScreen(html);
                     else
-                        PrevScreen(html, populate);
+                        PrevScreen(html);
                 }
                 else if (header == "Edit B Plan") {
                     currentQuestion = 0;
-                    if (currentScreen == "Get Started" || currentScreen == "My Restaurant")
+                    if (currentScreen == "Get Started" || currentScreen == "B Plan Explained")
                         NextScreen();
                     else
                         PrevScreen();
                 }
-                else if (header == "Plan Explained") {
-                    var header = "Plan Explained";
+                else if (header == "Examples") {
+                    var header = "Examples";
                     var para = "Blah blah";
 
                     var html = "<div class='businessPlanContent'>";
@@ -411,17 +446,15 @@
 
         }
 
-        function PopulateContent(html, func)
+        function PopulateContent(html)
         {
+            $(".carousel").html("");
             if (html) {
                 $(".fromDb").html(html);
-                if (func) {
-                    func();
-                }
                 return;
             }
 
-            if (!Questions.length) {
+            if (!Questions) {
                 $(".fromDb").html("");
                 return;
             }
@@ -564,7 +597,35 @@
 
                 $(".fromDb").html(html);
             }
-            
+
+            UpdateCarousel(currentQuestion);
+        }
+
+        function UpdateCarousel(currentQuestion) {
+            var pages = [];
+            var currentPage = 0;
+            for (var i = 0; i < Questions.length; i++) {
+                var question = Questions[i];
+                if (question.SheetId == Questions[currentQuestion].SheetId && (i == 0 || question.Page != Questions[i - 1].Page)) {
+                    pages.push(question.Section);
+                }
+                if (i == currentQuestion) {
+                    currentPage = pages.length;
+                }
+            }
+
+            currentPage -= 1;
+            var html = "";
+            for (var i = 1; i < pages.length; i++) {
+                if (i == currentPage)
+                    html += "<a class='active' data-toggle='tooltip' title='" + pages[i] + "'></a>";
+                else
+                    html += "<a data-toggle='tooltip' title='" + pages[i] + "'></a>";
+            }
+            $(".carousel").html(html);
+            $(".carousel").css("margin-left", 375 - (12 * (pages.length - 1)) + "px");
+            $('[data-toggle="tooltip"]').tooltip();
+            console.log(currentPage + " of " + pages.length);
         }
 
         function PopulatePrint()
@@ -683,11 +744,11 @@
             }
         }
 
-        function NextScreen(html, func)
+        function NextScreen(html)
         {
             $(".main").animate({ "margin-left": "0" }, 200, function () {
                 $(".main").fadeOut(100, function () {
-                    PopulateContent(html, func);
+                    PopulateContent(html);
                     var margin = ($(window).width() - 800) / 2;
                     $(".main").css("margin-left", margin + 100 + "px");
                     $(".main").fadeIn(100, function () {
@@ -698,11 +759,11 @@
             });
         }
 
-        function PrevScreen(html, func) {
+        function PrevScreen(html) {
             var margin = ($(window).width() - 800) / 2;
             $(".main").animate({ "margin-left": margin + 100 + "px" }, 200, function () {
                 $(".main").fadeOut(100, function () {
-                    PopulateContent(html, func);
+                    PopulateContent(html);
                     $(".main").css("margin-left", "0");
                     $(".main").fadeIn(100, function () {
                         $(".main").css("margin-left", "auto");
@@ -948,7 +1009,12 @@
 
             <div class="createRestaurantBtn">Create Business Plan</div>
             <div class="creatingPlan" ><img src="../img/gear.gif" style="height: 120px;margin-right: -30px;" />
-                <span>Generating Your Business Plan</span></div>
+                <span>Generating Your Business Plan</span>
+                <div class="progress" style="margin: 3px 124px 21px 30px;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:5%">
+                    </div>
+              </div>
+            </div>
         </div>
         <div class="helpDialog modal-dialog">
             <div class="dialogClose">X</div>
@@ -1008,7 +1074,7 @@
                 <div class="active" style="margin-left:40px;">Get Started</div>
                 <div>B Plan Explained</div>
                 <div>Edit B Plan</div>
-                <div>Extras</div>
+                <div>Examples</div>
                 <div>Print</div>
                 <div class="restaurantName"></div>
             </div>
@@ -1031,6 +1097,7 @@
             </div>
             <div class="btnSection">
                 <div class="backBtn btn" style="display:none;">Back</div>
+                <div class="carousel"></div>
                 <div class="nextBtn btn">Next</div>
             </div>
         </div>

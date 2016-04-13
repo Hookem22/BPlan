@@ -846,3 +846,20 @@ input.error {
     50%  {opacity: .1;}
     100% {opacity: 1;}
 }
+.carousel {
+    position: absolute;
+    margin: -19px 316px;
+}
+.carousel a {
+    background: #cacaca;
+    margin: 0 6px 6px;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    float:left;
+}
+.carousel a.active {
+    background-color: #34b8f4;
+}

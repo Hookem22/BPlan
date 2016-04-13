@@ -1,11 +1,12 @@
-﻿/*
+﻿
 @font-face {
     font-family: 'KlinicSlab';
     src: url('../fonts/KlinicSlabMedium.otf') format("opentype");
 }
+/*
 @font-face {
     font-family: 'KlinicSlabBold';
-    src: url('../fonts/KlinicSlabBold.otf') format("opentype");
+    src: usrl('../fonts/KlinicSlabBold.otf') format("opentype");
 }
 @font-face {
     font-family: 'KlinicSlabBoldIt';
@@ -559,3 +560,61 @@ h2
 input.error {
     border: 1px solid #a94442;
 }
+.signup {
+    position: fixed;
+    left: 50%;
+    width: 640px;
+    margin: 40px -320px 40px;
+    -webkit-box-shadow: 0 1px 1px #999;
+    -moz-box-shadow: 0 1px 1px #999;
+    box-shadow: 0 1px 1px #999;
+    background-color: #FFF;
+    z-index: 2000;
+    border-radius: 3px;
+    display: none;
+}
+.signupHeader {
+    font-family: "KlinicSlab","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    background-color: #f7f7f7;
+    font-size: 27px !important;
+    line-height: 34px;
+    padding: 24px;
+    text-align: center;
+    border-radius: 3px;
+}
+.signup input {
+    padding: 5px 15px;
+    height: 42px;
+    font-size: 18px;
+    font-weight: 200;
+    margin-bottom: 14px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+    width: 458px;
+    margin-left: 74px;
+    line-height: 1.42857143;
+    border: 1px solid #ccc;
+}
+.signupBtn {
+    background: #2a94d6;
+    border: 1px solid #2a94d6;
+    color: #fff;
+    cursor: pointer;
+    font-size: 24px;
+    border-radius: 32px;
+    display: inline;
+    padding: 10px 206px;
+    margin: 0px 70px 24px 70px;
+    float: left;
+}
+.signupBtn:hover {
+    background: #2585c1;
+    border: 1px solid #2585c1;
+}
+input.error {
+    border: 1px solid #a94442;
+    color: #333333;
+}
+

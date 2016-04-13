@@ -190,8 +190,8 @@ public class WordDoc
             }
         }
 
-        List<Question> basicInfo = Question.Get("Financials", "Basic Info", currentRestaurantId, false);
-        double equityCapital = basicInfo.ByTitleSum(new string[] { "Equity Capital" });
+        List<Question> basicInfo = Question.Get("Financials", "Investment", currentRestaurantId, false);
+        double equityCapital = basicInfo.ByTitleSum(new string[] { "Total Equity Investment" });
         
         tbl.AddRow(new string[] { "SOURCES OF CASH", "", "" }, new string[] { "Bold" });
         tbl.AddRow(new string[] { "Equity Contributions", equityCapital.ToString("#,##0;(#,##0)"), "" }, detailStyle);
@@ -1181,12 +1181,11 @@ public class WordDoc
         double distributeYear4 = investmentQuestions.ByTitleSum(new string[] { "Year 4 Percentage" });
         double distributeYear5 = investmentQuestions.ByTitleSum(new string[] { "Year 5 Percentage" });
 
-        double equityContribution = investmentQuestions.ByTitleSum(new string[] { "Operating Partner Equity Contribution" });
+        double equityContribution = investmentQuestions.ByTitleSum(new string[] { "Operating Partner Contribution" });
         double cashBeforePayback = investmentQuestions.ByTitleSum(new string[] { "Cash Distribution % Before Investor Payback" });
         double cashAfterPayback = investmentQuestions.ByTitleSum(new string[] { "Cash Distribution % After Investor Payback" });
+        double initialInvestment = investmentQuestions.ByTitleSum(new string[] { "Total Equity Investment" });
 
-        List<Question> basicInfo = Question.Get("Financials", "Basic Info", currentRestaurantId, false);
-        double initialInvestment = basicInfo.ByTitleSum(new string[] { "Equity Capital" });
         double totalInvestment = initialInvestment;
 
         string[] headerStyle = new string[] { "Bold" };
