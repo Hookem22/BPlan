@@ -390,6 +390,7 @@
                 <div class="priceTitle">Free Trial</div>
                 <div class="priceItem">Step by step app for building a professional business plan</div>
                 <div class="priceItem">Explanations from restaurateurs for each field to help develop of your final plan</div>
+                <div class="priceItem strike">Sample Business Plans</div>
                 <div class="priceItem strike">10 seperate financial documents ready to take to investors</div>
 <%--                <div class="priceItem strike">Web document for quick access between partners and investors</div>--%>
                 <div class="playButton" onclick="SignupClick('Financial Plan Only');">START FOR FREE</div>
@@ -400,6 +401,7 @@
                 <div class="priceTitle">Business Plan</div>
                 <div class="priceItem">Step by step app for building a professional business plan</div>
                 <div class="priceItem">Explanations from restaurateurs for each field to help develop of your final plan</div>
+                <div class="priceItem">Sample Business Plans</div>
                 <div class="priceItem">10 seperate financial documents ready to take to investors</div>
 <%--                <div class="priceItem">Web document for quick access between partners and investors</div>--%>
                 <div class="playButton" onclick="BuyClick('Financial Plan Only');">BUY NOW</div>
@@ -409,7 +411,7 @@
                 <div class="actualPrice" style="font-size: 28px;margin: 21px 0 33px;">Contact Us</div>
                 <div class="priceTitle">Custom Plan</div>
                 <div class="priceItem">Work directly with professional writers to create a custom plan around your restaurant concept</div>
-                <div class="playButton" onclick="ContactClick();" style="margin-top: 170px;">CONTACT US</div>
+                <div class="playButton" onclick="ContactClick();" style="margin-top: 208px;">CONTACT US</div>
             </div>
         </div>
 

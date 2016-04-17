@@ -49,7 +49,20 @@ public class Answer : BaseClass<Answer>
                     break;
             }
 
+            if (question.Title == "Kind of Food")
+                val = restaurant.Food;
+            if (question.Title == "Restaurant Style")
+                val = restaurant.RestaurantType;
+            if (question.Title == "Meals")
+                val = meals;
+            if (question.Title == "Alcohol")
+                val = drinks;
+            if (question.Title == "City")
+                val = restaurant.City;
+            if (question.Title == "Projected Opening Date")
+                val = restaurant.Opening;
 
+            //Meals and Drinks
             if (!meals.Contains("Breakfast") && question.SkipCondition.Contains("Breakfast"))
             {
                 val = "0";

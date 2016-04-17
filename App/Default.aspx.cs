@@ -22,14 +22,15 @@ public partial class App_Default : System.Web.UI.Page
             else if (ConfigurationManager.AppSettings["IsProduction"] == "true")
                 Response.Redirect("http://RestaurantBPlan.com");
             else {
-                ProspectId.Value = "6404";
-                CurrentUserId.Value = "2059";
+                //ProspectId.Value = "1091";
+                CurrentUserId.Value = "4062";
             }
         }
         else
         {
             CurrentUserId.Value = user.Id.ToString();
         }
+
         //UserName.Value = user.Name;
         //TimeSpan span = DateTime.Now - user.Joined;
         //if (span.Days <= 0)

@@ -266,7 +266,7 @@
 }
 .nav.secondary div
 {
-    margin: 0 14px 6px;
+    margin: 0 12px 6px;
     position: relative;
 }
 .main .title
@@ -862,4 +862,14 @@ input.error {
 }
 .carousel a.active {
     background-color: #34b8f4;
+}
+.explained {
+    display:none;
+}
+.explainedContent ul li {
+    list-style: initial;
+    margin-left: 81px;
+}
+.explainedContent p {
+    margin: 0 65px 10px;
 }

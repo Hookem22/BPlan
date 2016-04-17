@@ -111,16 +111,18 @@
                     //$(".createRestaurantBtn").hide();
                     $(".creatingPlan").fadeIn();
                     $(".createRestaurant").animate({ "height": "235px", "top": "120px" }, 1500, function () {
-                        var progressWidth = 4;
-                        var restaurantCreatedTimer = setInterval(function () {
-                            progressWidth += 3;
-                            $(".creatingPlan .progress-bar").css("width", progressWidth + "%");
-                            if (isRestaurantCreated && progressWidth > 96) {
-                                window.location.reload();
-                            }
-                        }, 200);
+
                     });
                 });
+
+                var progressWidth = 0;
+                var restaurantCreatedTimer = setInterval(function () {
+                    progressWidth += 3;
+                    $(".creatingPlan .progress-bar").css("width", progressWidth + "%");
+                    if (isRestaurantCreated && progressWidth > 96) {
+                        window.location.reload();
+                    }
+                }, 200);
 
                 var meals = "";
                 $(".createRestaurant .meals .blueCheckBox.checked").each(function () {
@@ -180,10 +182,11 @@
                     return;
                 }
 
+                var currentScreen = $(".subheaderList .active").html();
                 $(this).siblings().removeClass("active");
                 $(this).addClass("active");
 
-                Get();
+                Get(currentScreen);
             });
 
             $("body").on("click", ".main .backBtn", function () {
@@ -217,14 +220,14 @@
                 var left = $(".subheaderList").css("left");
                 left = +left.substring(0, left.indexOf("px"));
                 var leftClick = $(this).hasClass("left");
-                if(left <= -770)
-                    left = leftClick ? -310 : -770;
-                else if (left <= -310)
-                    left = leftClick ? 25 : -770;
+                if(left <= -663)
+                    left = leftClick ? -324 : -663;
+                else if (left <= -324)
+                    left = leftClick ? 25 : -663;
                 else if(left <= 25)
-                    left = leftClick ? 25 : -310;
+                    left = leftClick ? 25 : -324;
 
-                $(".subheaderList").animate({ left: left + "px" }, 200, function () { });
+                $(".subheaderList").animate({ left: left + "px" }, 350, function () { });
 
             });
 
@@ -333,34 +336,8 @@
                     PrevScreen(html);
                 }
                 else if (header == "B Plan Explained") {
-                    /*
-                    var rst = currentUser.Restaurant;
-                    var header = rst.Name;
-                    var para = "<div class='multiTextGroup' style='margin: 0 20px 30px 50px'>";
-                    para += "<div class='multiText' style='clear:left;'><div style='float:left;max-width:290px;'>Kind of Food</div>";
-                    para += "<input id='Food' type='text' value='" + rst.Food + "'></div>";
-                    para += "<div class='multiText' ><div style='float:left;max-width:290px;'>Restaurant Style</div>";
-                    para += "<select id='RestaurantType'><option value='Fine Dining'>Fine Dining</option><option value='Fast Casual'>Fast Casual</option>";
-                    para += "<option value='Casual'>Casual</option><option value='Trailer'>Trailer</option></select></div>";
-                    para += "<div class='multiText' style='clear:left;'><div style='float:left;max-width:290px;'>Number of Dining Seats</div>";
-                    para += "<input id='Size' type='text' value='" + rst.Size + "'></div>";
-                    para += "<div class='multiText' ><div style='float:left;max-width:290px;'>Square Footage</div>";
-                    para += "<input id='SquareFootage' type='text' value='" + rst.SquareFootage + "'></div>";
-                    para += "<div class='multiText' style='clear:left;'><div style='float:left;max-width:290px;'>City</div>";
-                    para += "<input id='City' type='text' value='" + rst.City + "'></div>";
-                    para += "<div class='multiText' ><div style='float:left;max-width:290px;'>Projected Opening Date</div>";
-                    para += "<input id='Opening' type='text' value='" + rst.Opening + "'></div>";
-                    para += "</div>";
 
-                    var html = "<div class='businessPlanContent'>";
-                    html += "<h2 style='text-align:center;margin-bottom:.5em;'>" + header + "</h2>";
-                    html += para;
-                    html += "</div>";
-
-                    var populate = function () {
-                        $(".multiTextGroup select").val(rst.RestaurantType);
-                    };*/
-
+                    var html = $(".explained div").first().html();
                     if (currentScreen == "Get Started")
                         NextScreen(html);
                     else
@@ -373,33 +350,38 @@
                     else
                         PrevScreen();
                 }
-                else if (header == "Examples") {
-                    var header = "Examples";
-                    var para = "Blah blah";
-
-                    var html = "<div class='businessPlanContent'>";
-                    html += "<h2 style='text-align:center;margin-bottom:.5em;'>" + header + "</h2>";
-                    html += "<div class='instructions' style='margin: 2em 1em;'>" + para + "</div>";
-                    html += "</div>";
-
-                    if (currentScreen == "Print")
-                        PrevScreen(html);
-                    else
-                        NextScreen(html);
-                }
                 else if (header == "Print") {
                     PopulatePrint();
                 }
             }
             else {
-                for (var i = 0; i < Questions.length; i++) {
-                    if (Questions[i].QuestionSheet.Name == category) {
-                        currentQuestion = i;
-                        break;
-                    }
-                }
+                if (header == "B Plan Explained") {
+                    var next = false;
+                    $(".subheaderList div").each(function (i) {
+                        console.log($(this).html());
+                        if ($(this).hasClass("active")) {
+                            var html = $(".explained").eq(i).html();
+                            if (next)
+                                NextScreen(html);
+                            else
+                                PrevScreen(html);
+                        }
+                        if ($(this).html() == currentScreen) {
+                            next = true;
+                        }
+                    });
 
-                NextScreen();
+
+                }
+                else if (header == "Edit B Plan") {
+                    for (var i = 0; i < Questions.length; i++) {
+                        if (Questions[i].QuestionSheet.Name == category) {
+                            currentQuestion = i;
+                            break;
+                        }
+                    }
+                    NextScreen();
+                }
             }
         }
 
@@ -411,22 +393,23 @@
             if (header == "Get Started")
             {
                 //subheaders = ["Create Your Concept"];
-                //$(".scrollArrow").hide();
+                $(".scrollArrow").hide();
                 //$(".nav.secondary .subheaderList").css({ left: "50px" });
 
                 $(".scrollArrow").hide();
                 $(".nav.secondary .subheaderList").hide();
                 $(".backBtn").hide();
+                $(".nextBtn").show();
             }
-            else if (header == "My Restaurant")
+            else if (header == "B Plan Explained")
             {
                 //subheaders = ["Management Team", "Market Analysis", "Marketing Strategy", "Staffing", "Company Description", "Daily Operations", "Software and Controls", "Other Control Systems", "Inventory", "Accounting"];
-                //$(".scrollArrow").show();
-                //$(".nav.secondary .subheaderList").css({ left: "25px" });
+                subheaders = ["Overview", "Sources & Uses of Cash", "Capital Budget", "5 Year Projections", "Income & Cash Flow", "Investment Returns", "Average Check Price", "Typical Week", "Hourly Labor", "Cash Flow Break Even"];
+                $(".scrollArrow").show();
+                $(".nav.secondary .subheaderList").css({ left: "25px" });
 
-                $(".scrollArrow").hide();
-                $(".nav.secondary .subheaderList").hide();
                 $(".backBtn").hide();
+                $(".nextBtn").hide();
             }
             else if (header == "Edit B Plan")
             {
@@ -434,6 +417,7 @@
                 $(".scrollArrow").hide();
                 $(".nav.secondary .subheaderList").css({ left: "50px" }).show();
                 $(".backBtn").show();
+                $(".nextBtn").show();
             }
 
             $(".nav.secondary .subheaderList").html("");
@@ -1074,7 +1058,6 @@
                 <div class="active" style="margin-left:40px;">Get Started</div>
                 <div>B Plan Explained</div>
                 <div>Edit B Plan</div>
-                <div>Examples</div>
                 <div>Print</div>
                 <div class="restaurantName"></div>
             </div>
@@ -1101,6 +1084,50 @@
                 <div class="nextBtn btn">Next</div>
             </div>
         </div>
+
+       <div class="explained">
+         <div class="explainedContent">
+           <h2 style="text-align:center;margin-bottom:.5em;">Financials</h2>
+           <div class="instructions" style="margin: 2em 1em;">
+               <p>For potential investors and lenders, the Financials are often viewed as the heart of the business
+                plan and this section will get a lot of attention and even scrutiny from potential lender and
+                investors. This is where they have the opportunity to evaluate the financial viability of the venture
+                and – all important – gain a sense of the risk and return on investment potential the venture is
+                likely to offer.</p><p>
+                Some of the main concerns or issues any investor will want to learn from the Financials section
+                include:</p><ul>
+                    <li>How much startup capital will the venture require and where it will come from.</li>
+                    <li>How profitable is the restaurant likely to be.</li>
+                    <li>When can the investor(s) expect to get their investment back.</li>
+                    <li>What kind of ROI is this investment likely to generate.</li>
+                 </ul><br />
+                <p>Even though you may have years of hospitality experience and are an expert at operating a
+                restaurant, lenders and investors want to know you understand the financial side of the business
+                as well. Showing knowledge of the numbers lets them know you see the big picture and are
+                capable of not only running a restaurant but you also possess the skills to build a successful
+                business as well.</p><p>
+                Even though you may not have a financial background, you’ll need to understand the numbers on
+                the various schedules and statements that make up the Financial Projections section and be
+                prepared to answer questions about the assumptions used to create them. Don’t be concerned or
+                intimidated. As you’ll soon see, the Financials are basically just common sense and we’ve
+                designed this section to be very straightforward and easy to understand. You, as well as those
+                who read your business plan, should quickly gain a clear picture of the financial aspects of your
+                venture if you follow this format. </p>
+           </div>
+       </div>
+     </div>
+     <div class="explained">
+         <div class="explainedContent">
+           <h2 style="text-align:center;margin-bottom:.5em;">Projected Sources & Uses of Cash</h2>
+           <div class="instructions" style="margin: 2em 1em;">
+               <p>The Projected Sources & Uses of Cash shows the total amount of funding required to
+                    finance the startup and opening of the restaurant, where the funds are expect to come
+                    from and how these funds will be spent.</p>
+               <img src="../img/screen1.png" style="margin: 12px 0 0 75px;" />
+           </div>
+       </div>
+     </div>
+
     </form>
 </body>
 </html>
