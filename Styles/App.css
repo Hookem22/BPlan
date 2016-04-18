@@ -868,8 +868,11 @@ input.error {
 }
 .explainedContent ul li {
     list-style: initial;
-    margin-left: 81px;
+    margin-left: 114px;
 }
 .explainedContent p {
     margin: 0 65px 10px;
+}
+.explainedContent h3 {
+    margin-left: 65px;
 }

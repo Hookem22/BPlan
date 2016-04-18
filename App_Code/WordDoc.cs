@@ -160,7 +160,9 @@ public class WordDoc
 
         body.AddHeader("Sales Projections - Average Check Price");
         body.AppendChild(Tables["Breakfast"]);
+        body.AddLineBreak();
         body.AppendChild(Tables["Lunch"]);
+        body.AddLineBreak();
         body.AppendChild(Tables["Dinner"]);
         body.AddPageBreak();
         body.AddHeader("Sales Projections - Typical Week");
@@ -294,10 +296,10 @@ public class WordDoc
 
         //if breakfast
         double [] breakfastSums = AverageCheck(body, "Breakfast");
-        body.AddLineBreak();
+        //body.AddLineBreak();
         //if lunch
         double[] lunchSums = AverageCheck(body, "Lunch");
-        body.AddLineBreak();
+        //body.AddLineBreak();
         //if dinner
         double[] dinnerSums = AverageCheck(body, "Dinner");
         
