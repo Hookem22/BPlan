@@ -273,14 +273,14 @@
                 $(this).attr("src", src);
             });
 
-            $(".main").on("click", ".printBtn", function () {
-                var header = "";
-                var imgs = $(".printContent img");
-                for (var i = 0; i < imgs.length; i++)
-                {
-                    if ($(imgs[i]).attr("src").indexOf("Unchecked") < 0)
-                        header += i;
-                }
+            $(".main").on("click", ".downloadBtn.bplan", function () {
+                var header = "2";
+                //var imgs = $(".printContent img");
+                //for (var i = 0; i < imgs.length; i++)
+                //{
+                //    if ($(imgs[i]).attr("src").indexOf("Unchecked") < 0)
+                //        header += i;
+                //}
                 if (header)
                 {
                     window.open("/Word?header=" + header + "&r=" + currentUser.Restaurant.Id);
@@ -341,7 +341,7 @@
                 }
                 else if (header == "B Plan Explained") {
 
-                    var html = $(".explained div").first().html();
+                    var html = $(".explained").first().html();
                     if (currentScreen == "Get Started")
                         NextScreen(html);
                     else
@@ -409,7 +409,8 @@
                 //subheaders = ["Management Team", "Market Analysis", "Marketing Strategy", "Staffing", "Company Description", "Daily Operations", "Software and Controls", "Other Control Systems", "Inventory", "Accounting"];
                 subheaders = ["Overview", "Sources & Uses of Cash", "Capital Budget", "5 Year Projections", "Income & Cash Flow", "Investment Returns", "Average Check Price", "Typical Week", "Hourly Labor", "Cash Flow Break Even"];
                 $(".scrollArrow").show();
-                $(".nav.secondary .subheaderList").css({ left: "25px" });
+                $(".nav.secondary .subheaderList").css({ left: "25px" }).show();
+                $(".nav.secondary").show();
 
                 $(".backBtn").show();
                 $(".nextBtn").show();
@@ -419,6 +420,7 @@
                 subheaders = ["Basic Info", "Capital Budget", "Sales Projection", "Hourly Labor", "Expenses", "Investment"];
                 $(".scrollArrow").hide();
                 $(".nav.secondary .subheaderList").css({ left: "50px" }).show();
+                $(".nav.secondary").show();
                 $(".backBtn").show();
                 $(".nextBtn").show();
             }
@@ -623,9 +625,9 @@
                 $(".main").fadeOut(100, function () {
                     
                     $(".nav.secondary .subheaderList").html("");
+                    $(".nav.secondary").hide();
                     $(".scrollArrow").hide();
-
-                    var question = Questions[0];
+                    /*
                     var html = "<div class='printContent'>";
                     html += "<h2 style='text-align:center;margin-bottom:.5em;'>Print Business Plan</h2>";
                     html += "<div style='margin: 1em 6em 2em 8em;float:left;'>";
@@ -636,6 +638,9 @@
                     html += "<div class='printBtn'>Print Now</div>";
                     html += "</div>";
                     html += "<div style='clear:both;'></div>";
+                    */
+                    var html = $(".printDiv").html();
+                    html = html.replace("{RestaurantName}", currentUser.Restaurant.Name);
 
                     $(".fromDb").html(html);
                     $(".btnSection").hide();
@@ -1392,6 +1397,34 @@
                volume is automatically calculated and shown an annually, monthly and weekly. </p>
                <img src="../img/screen16.png" style="margin: 12px 0 0px 59px;" />
            </div>
+       </div>
+     </div>
+     <div class="printDiv" style="display:none;">
+       <div class="printDivContent" style="margin-top: -30px;">
+         <h2 style="text-align:center;margin-bottom:.8em;">Print Business Plans</h2>
+         <div style="border: 3px solid #e8e8e8;border-radius: 5px;padding: 32px 18px" >
+             <div style="font-size: 28px;">Business Plan for {RestaurantName}</div><div class="downloadBtn bplan">Download Now</div>
+         </div>
+         <div>
+             <div style="width: 610px;margin: 12px 0;"><span style="font-weight:bold;">Business Plan Template</span> - Instructions for all the other non financial sections including: 
+                 Executive Summary, Concept, Management Team, Market Analysis, Marketing Strategy, Location, and Operations
+             </div><div class="downloadBtn" style="top: 32px;">Download Now</div>
+         </div>
+         <div style="font-size: 24px;font-weight: bold;padding: 0 12px;margin: 16px 16px -12px;background: white;z-index: 1;width: 272px;">
+             Sample Business Plans
+         </div>
+         <div style="border-top: 3px solid #CCCCCC;border-left: 3px solid #CCCCCC;border-right: 3px solid #CCCCCC;border-radius:5px 5px 0 0;">
+             <div style="margin-top: 10px;"><span style="font-weight:bold;">Blue Mesa Grill</span> - an upscale table service restaurant</div><div class="downloadBtn" style="top: 22px;">Download Now</div>
+         </div>
+         <div style="border-left: 3px solid #CCCCCC;border-right: 3px solid #CCCCCC;">
+             <div><span style="font-weight:bold;">Chili's</span> - a casual table service restaurant</div><div class="downloadBtn">Download Now</div>
+         </div>
+         <div style="border-left: 3px solid #CCCCCC;border-right: 3px solid #CCCCCC;">
+             <div><span style="font-weight:bold;">Torchy's Taco</span> - a fast casual quick service restaurant</div><div class="downloadBtn">Download Now</div>
+         </div>
+         <div style="border-bottom: 3px solid #CCCCCC;border-left: 3px solid #CCCCCC;border-right: 3px solid #CCCCCC;border-radius:0 0 5px 5px;">
+             <div style="margin-bottom: 14px;"><span style="font-weight:bold;">Tom's Food Truck</span> - a food truck</div><div class="downloadBtn">Download Now</div>
+         </div>
        </div>
      </div>
     </form>
